@@ -1,4 +1,6 @@
 import {chromium} from 'playwright';
+import {readFile} from 'node:fs/promises';
+import {verifyExperiment} from '../src/math/contract.js';
 const errors=[];let browser;
 try{browser=await chromium.launch({channel:'chrome',headless:true});}catch(e){browser=await chromium.launch({headless:true});}
 const page=await browser.newPage({viewport:{width:1440,height:900},deviceScaleFactor:1});
@@ -28,6 +30,13 @@ const verificationText=await page.locator('#verificationOutput').textContent();
 if(!verificationText.includes('网格') && !verificationText.includes('高度'))errors.push('verification output missing');
 await page.locator('.mode[data-mode="research"]').click();
 await page.locator('#viewToggle').click();
+const dlPromise=page.waitForEvent('download',{timeout:18000});
+await page.locator('#exportData').click();
+const dl=await dlPromise;
+const exported=JSON.parse(await readFile(await dl.path(),'utf8'));
+if(exported.scientific?.result?.evidence?.level!=='E1')errors.push('Missing E1 evidence in exported research package');
+else await verifyExperiment(exported.scientific);
+if(!exported.scientific?.scientificHash?.startsWith('sha256:'))errors.push('Scientific SHA-256 digest missing');
 await page.screenshot({path:'docs/research-1440.png',fullPage:true});
 const mobile=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});
 mobile.on('pageerror',e=>errors.push('mobile:'+String(e)));
@@ -35,6 +44,6 @@ await mobile.goto(process.env.QUASI_URL||'http://127.0.0.1:5188/',{waitUntil:'do
 await mobile.waitForFunction(()=>document.querySelector('#numericStatus')?.textContent==='计算完成',{timeout:15000});
 await mobile.waitForTimeout(700);
 await mobile.screenshot({path:'docs/mobile-390.png',fullPage:true});
-console.log(JSON.stringify({first,changed,comparison,researchTitle:await page.locator('#inspectorHeading').textContent(),mobileTitle:await mobile.title(),criticalText:criticalText?.slice(0,150),verificationText:verificationText?.slice(0,240),errors},null,2));
+console.log(JSON.stringify({first,changed,comparison,researchTitle:await page.locator('#inspectorHeading').textContent(),mobileTitle:await mobile.title(),criticalText:criticalText?.slice(0,150),verificationText:verificationText?.slice(0,240),exportedSchema:exported.scientific?.schema,exportedEvidence:exported.scientific?.result?.evidence?.level,errors},null,2));
 await browser.close();
 if(errors.length)process.exitCode=1;

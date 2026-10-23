@@ -1,4 +1,8 @@
-# Quasi Atlas · 数学秘境 (v0.2)
+# Quasi Atlas · 数学秘境 (G0 research foundation)
+
+**部署域名**：https://math.edunest.app/（独立 Vercel 项目 quasi-atlas-math）
+
+G0 科研地基：12 组解析 golden fixtures、严格模型/实验契约、E1 证据等级、SHA-256 完整性校验、CI 测试。当前不是数学证明软件。详细记录见 [docs/G0_IMPLEMENTATION_REPORT.md](docs/G0_IMPLEMENTATION_REPORT.md)。
 
 > **科研级完整规划已形成**：[规划文档总入口](docs/ROADMAP_INDEX.md) ｜[总路线图](docs/RESEARCH_GRADE_MASTER_PLAN.md) ｜[生活与数学体验](docs/EVERYDAY_MATH_EXPERIENCE_SPEC.md) ｜[科学验证协议](docs/SCIENTIFIC_VALIDATION_PROTOCOL.md) ｜[技术与交付计划](docs/TECH_ARCHITECTURE_AND_DELIVERY.md)。这些是**下一阶段规划**，不代表科研级功能已上线。
 
