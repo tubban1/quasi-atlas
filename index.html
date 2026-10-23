@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><meta name="theme-color" content="#0b1820"/><title>Quasi Atlas · 数学秘境</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2715%27 fill=%27%23102d36%27/%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2719%27 fill=%27none%27 stroke=%27%23d8d3a8%27 stroke-width=%273%27/%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%276%27 fill=%27%23eed5a2%27/%3E%3C/svg%3E"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet"/></head>
+<body>
+<div id="app">
+<header class="topbar">
+  <div class="identity"><div class="brand-glyph" aria-hidden="true"><span></span><span></span><span></span></div><div><div class="brand-name">quasi<span>atlas</span><b class="beta">BETA</b></div><div class="brand-sub">数学秘境 · EXPLORE THE UNSEEN</div></div></div>
+  <div class="mode-switch" role="tablist" aria-label="探索模式"><button class="mode active" data-mode="wander" role="tab" aria-selected="true">✦ &nbsp;漫游</button><button class="mode" data-mode="learn" role="tab" aria-selected="false">◈ &nbsp;理解</button><button class="mode" data-mode="research" role="tab" aria-selected="false">⌁ &nbsp;研究</button></div>
+  <div class="top-actions"><span class="status-pill"><i></i> 本地计算 · 无需登录</span><button class="iconbtn" id="copyLink" title="复制可复现实验链接" aria-label="分享实验">↗</button><button class="iconbtn" id="themeToggle" title="切换色彩世界" aria-label="切换色彩">◐</button></div>
+</header>
+<div class="layout">
+<aside class="rail left-panel">
+  <div class="rail-scroll">
+    <div class="section-overline"><span class="sun-dot"></span> 数学世界档案 / WORLD ATLAS</div>
+    <h1>每一条曲线，<br/><em>都是未知的海岸。</em></h1>
+    <p class="intro">不必先懂公式。选一个世界，移动潮位，看看形状如何生长、相遇与消失。</p>
+    <div class="section-heading"><span>01</span><b>选择一个世界</b></div>
+    <div class="preset-list" id="presetList"></div>
+    <div class="section-heading"><span>02</span><b>发现一个问题</b></div>
+    <div class="question-card" id="questionCard"><span class="eyebrow">今日探索问题</span><p></p><button id="tryChallenge" class="text-link">试试看 <span>→</span></button></div>
+    <div class="rail-foot">“好奇心比答案更早开始。”<br/><span>所有图形均由公式实时计算生成。</span></div>
+  </div>
+</aside>
+<main class="workspace">
+ <div class="canvas-wrap" id="canvasWrap">
+  <canvas id="worldCanvas" aria-label="实时数学等值线图形" tabindex="0"></canvas>
+  <div class="stage-hud top-left"><span class="eyebrow light" id="worldIndex">WORLD 01 / QUASIPERIODIC</span><h2 id="worldTitle">不可重复的海岸</h2><p id="worldTagline">When almost the same is never the same.</p></div>
+  <div class="stage-hud top-right"><button class="floating-action" id="viewToggle" title="切换图层">◉ &nbsp;<span id="viewLabel">地貌</span></button><button class="floating-action" id="resetView" title="重置视角">⌑ &nbsp;复位</button></div>
+  <div class="crosshair-info" id="probe" aria-live="polite" hidden></div>
+  <div class="pin-info" id="pin" hidden><button id="clearPin" aria-label="关闭探针">×</button><span class="eyebrow light">采样坐标 / SAMPLE</span><p id="pinValue"></p><small id="pinCoords"></small></div>
+  <div class="map-legend"><div class="legend-gradient"></div><div class="legend-label"><span>低势能</span><span>高势能</span></div></div>
+  <div class="canvas-note" id="canvasNote">拖动画布以探索 · 滚轮缩放 · 点击插入探针</div>
+  <div class="stage-bottom">
+    <div class="level-title"><div><span class="eyebrow light">等值面高度 / CONTOUR LEVEL</span><div class="level-value"><strong id="levelValue">+0.00</strong><span>改变高度，世界的连通方式也会改变。</span></div></div><button id="playLevel" class="playbtn" title="自动扫描高度">▶ <span>观察变化</span></button></div>
+    <input id="levelSlider" class="range level-range" aria-label="等值线高度" type="range" min="-3.4" max="3.4" step=".02" value="0"/>
+    <div class="range-ticks"><span>−3.4</span><span>0 · 海平面</span><span>+3.4</span></div>
+    <div class="event-header"><span>结构事件 · 当高度变化时</span><span id="eventCount">正在计算…</span></div>
+    <div class="event-track" id="eventTrack" title="点击跳转到结构变化附近"></div>
+  </div>
+ </div>
+ <section class="mobile-spacer"></section>
+</main>
+<aside class="rail right-panel"><div class="rail-scroll">
+ <div class="section-overline"><span class="sun-dot cyan"></span> 观察实验室 / FIELD NOTES</div>
+ <div class="right-title"><h2 id="inspectorHeading">正在观察</h2><span id="numericStatus" class="status-text">采样中</span></div>
+ <div class="big-stat"><div class="big-number" id="totalLines">—</div><div class="stat-desc">当前等值线连通分量<br/><small>由网格追踪，随分辨率变化</small></div></div>
+ <div class="stats-row"><div><strong id="closedCount">—</strong><span>闭合曲线</span></div><div><strong id="openCount">—</strong><span>接触视窗边界</span></div><div><strong id="totalLength">—</strong><span>估计曲线总长</span></div></div>
+ <div class="comparison"><button id="setBaseline">＋ 固定当前状态作对照</button><div id="comparisonReadout">建立基准后，观察改变高度或相位会怎样影响结构。</div></div>
+ <div class="scientific-note" id="scientificNote">一条线接触画布边界，并不意味着它在无限平面上无界。</div>
+ <div class="section-heading"><span>03</span><b>改变生成规则</b></div>
+ <div class="param"><div class="param-label"><label for="scaleSlider">探索尺度 <small>VIEW SCALE</small></label><strong id="scaleValue">22.0</strong></div><input class="range" type="range" id="scaleSlider" min="5" max="58" step=".5" value="22"/></div>
+ <div class="param"><div class="param-label"><label for="phaseSlider">相位漂移 <small>PHASE</small></label><strong id="phaseValue">0.00</strong></div><input class="range" type="range" id="phaseSlider" min="-3.14" max="3.14" step=".01" value="0"/></div>
+ <div class="param"><div class="param-label"><label for="detailSlider">数值精度 <small>GRID RESOLUTION</small></label><strong id="detailValue">280</strong></div><input class="range" type="range" id="detailSlider" min="160" max="560" step="40" value="280"/></div>
+ <div class="section-heading"><span>04</span><b>保存一次发现</b></div>
+ <div class="button-grid"><button id="saveSnapshot" class="action primary">↓ &nbsp;高清 PNG</button><button id="exportData" class="action">⇥ &nbsp;数据 JSON</button><button id="exportSvg" class="action">◇ &nbsp;曲线 SVG</button><button id="copyState" class="action">↗ &nbsp;实验链接</button></div>
+ <div class="mode-insight" id="modeInsight"><span class="eyebrow">THE DISCOVERY LENS</span><h3>观察，而不是猜测。</h3><p>试着沿着事件轴移动：同一张地图会改变其拓扑结构。</p></div>
+ <details class="formula"><summary>∑ &nbsp;查看数学定义与限制 <span>⌄</span></summary><div id="formulaText"></div></details>
+ <div class="footer-note">Quasi Atlas 0.1 · 数值现象 ≠ 数学证明。<br/>研究用途请记录网格尺度和边界条件。</div>
+</div></aside>
+</div><div id="toast" role="status" aria-live="polite"></div>
+</div>
+<script type="module" src="/src/main.js"></script>
+</body></html>
