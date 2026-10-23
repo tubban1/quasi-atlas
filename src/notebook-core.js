@@ -4,6 +4,7 @@
 import {createModel,createExperiment,verifyExperiment,sha256,canonicalJSON,ContractError,EXPERIMENT_SCHEMA} from './math/contract.js';
 import {getPreset,PRESETS,evaluateField} from './math/fields.js';
 import {extractContours} from './math/contours.js';
+import {NOTEBOOK_PINNED_SCHEMA,cleanBuildProvenance} from './repro-metadata.js';
 
 export const NOTEBOOK_SCHEMA='quasi-atlas.notebook/1.0';
 export const G2_ENGINE='g2-replay/1.0';
@@ -72,24 +73,27 @@ export async function verifySnapshot(item){
    fail('MODEL_VIEW_MISMATCH','Snapshot field mismatch');
  return true;
 }
-export async function createNotebook({title='我的数学发现',notes={},snapshots=[]}={}){
+export async function createNotebook({title='我的数学发现',notes={},snapshots=[],buildProvenance=null}={}){
  short(title,'title',120);if(!Array.isArray(snapshots)||snapshots.length>MAX_SNAPSHOTS)fail('SNAPSHOT_LIMIT','Too many snapshots');
  const hashes=new Set();
  for(const s of snapshots){await verifySnapshot(s);if(hashes.has(s.snapshotHash))fail('DUPLICATE_SNAPSHOT','Duplicate immutable snapshot');hashes.add(s.snapshotHash);}
- const doc={schema:NOTEBOOK_SCHEMA,engine:G2_ENGINE,title,notes:cleanNotes(notes),snapshots,
+ const doc={schema:buildProvenance===null?NOTEBOOK_SCHEMA:NOTEBOOK_PINNED_SCHEMA,engine:G2_ENGINE,title,notes:cleanNotes(notes),snapshots,
    provenance:{source:'audited-synthetic-presets',storage:'local-first',networkUpload:false,certified:false,
     warning:'G2 hash checks integrity, not identity, authenticity or mathematical proof.'}};
+ if(buildProvenance!==null)doc.buildProvenance=cleanBuildProvenance(buildProvenance);
  return {...doc,notebookHash:'sha256:'+await sha256(doc),exportedAt:new Date().toISOString()};
 }
 export async function verifyNotebook(input){
- checkKeys(input,['schema','engine','title','notes','snapshots','provenance','notebookHash','exportedAt'],'notebook');
- if(input.schema!==NOTEBOOK_SCHEMA||input.engine!==G2_ENGINE)fail('UNSUPPORTED_SCHEMA','Unknown notebook format or engine version');
+ checkKeys(input,['schema','engine','title','notes','snapshots','provenance','buildProvenance','notebookHash','exportedAt'],'notebook');
+ if(![NOTEBOOK_SCHEMA,NOTEBOOK_PINNED_SCHEMA].includes(input.schema)||input.engine!==G2_ENGINE)fail('UNSUPPORTED_SCHEMA','Unknown notebook format or engine version');
  if(typeof input.notebookHash!=='string'||!/^sha256:[a-f0-9]{64}$/.test(input.notebookHash))fail('INVALID_HASH','Invalid notebook hash');
  iso(input.exportedAt);
+ if(input.schema===NOTEBOOK_PINNED_SCHEMA)cleanBuildProvenance(input.buildProvenance);
+ else if('buildProvenance' in input)fail('INVALID_PROVENANCE','Legacy notebook cannot claim pinned provenance');
  const {notebookHash,exportedAt,...signed}=input;
  if('sha256:'+await sha256(signed)!==notebookHash)fail('HASH_MISMATCH','Notebook content modified');
  // Reconstruct exact required provenance and validated nested data.
- const clean=await createNotebook({title:input.title,notes:input.notes,snapshots:input.snapshots});
+ const clean=await createNotebook({title:input.title,notes:input.notes,snapshots:input.snapshots,buildProvenance:input.buildProvenance??null});
  if(canonicalJSON(signed)!==canonicalJSON((({notebookHash,exportedAt,...v})=>v)(clean)))fail('INVALID_NOTEBOOK','Unknown or invalid notebook contents');
  return true;
 }

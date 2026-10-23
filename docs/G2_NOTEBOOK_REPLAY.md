@@ -1,6 +1,6 @@
 # Quasi Atlas G2 — Discovery Notebook / Replay
 
-Version: G2 Beta v0.5.0-beta.1 (2026-10-24)
+Version: G2 Beta v0.5.0-beta.2 (2026-10-24). Cross-runtime reproducibility protocol and results: [G2_CROSS_RUNTIME_QUALIFICATION.md](G2_CROSS_RUNTIME_QUALIFICATION.md).
 
 ## User workflow
 
@@ -12,8 +12,8 @@ The G2 notebook works on audited 2D scalar fields only; the beats lesson is 1D a
 
 ## Data contracts and model fidelity
 
-- Notebook schema: quasi-atlas.notebook/1.0; replay engine g2-replay/1.0.
-- Snapshot schema: quasi-atlas.snapshot/1.0; each snapshot includes snapshotHash, authored notes, display view and a complete unchanged scientific experiment.
+- Notebook schema: quasi-atlas.notebook/1.0 (legacy, unpinned) or quasi-atlas.notebook/1.1 (git/lockfile/math-source pinned). Replay engine g2-replay/1.0.
+- Snapshot schema: quasi-atlas.snapshot/1.0; each snapshot includes snapshotHash, authored notes, display view and a complete unchanged scientific experiment. Notebook 1.1 adds immutable buildProvenance: Git revision, math-source SHA-256 and package-lock SHA-256; matching requires identical numerical source and lockfile.
 - Scientific experiment: quasi-atlas.experiment/1.0 (G0/G1 contract) including exact preset, finite domain, parameter values, float32 sampling, numeric contour stats, engine/algorithm identification and E1 evidence.
 - scientificHash signs scientific content; snapshotHash signs snapshot content excluding informational createdAt timestamps; notebookHash signs archive content excluding exportedAt.
 - Integrity hashes detect changes, **not authentication or proof**.
@@ -48,7 +48,7 @@ This reuses the **same** field evaluator and Marching Squares math implementatio
 
 Implemented tests:
 - G2 schema, hash mismatch, falsified results, unsupported versions, duplicate snapshots, CSV safety, G0 migration, same-content stable fingerprints.
-- Headless replay from two isolated Node processes and deliberate corrupted-file rejection.
+- Headless replay from two isolated Node processes and deliberate corrupted-file rejection; portable three-case canary plus math-source / lockfile mismatch fail-closed tests.
 - Browser: capture A/B, stale state after change, parameter comparison, worker MATCH, JSON → CLI MATCH, CSV, page reload/local persistence, malicious import refusal, verified G0 migration, G2 roundtrip import.
 - Mobile: Notebook usability in 390px viewport, no horizontal overflow.
 - Previous G0/G1 math contract and browser regression remain required.
@@ -60,4 +60,4 @@ Not yet claimed:
 
 ## Delivery
 
-Local Mac → private GitHub tubban1/quasi-atlas main → Git-backed independent Vercel quasi-atlas-math project → Cloudflare math.edunest.app. DNS is static. Production Vercel build is fail-closed: 6 required test files, at least 62 tests, and successful Vite build. GitHub Actions runners are currently blocked by the known GitHub account-level billing/spending limit, not by test failures.
+Local Mac → private GitHub tubban1/quasi-atlas main → Git-backed independent Vercel quasi-atlas-math project → Cloudflare math.edunest.app. DNS is static. Production Vercel build is fail-closed: 7 required test files, at least 67 tests plus a 3-case pinned canary replay, and successful Vite build. GitHub Actions runners are currently blocked by the known GitHub account-level billing/spending limit, not by test failures.

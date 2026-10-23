@@ -155,7 +155,7 @@
 </section>
 <dialog id="notebookDialog" class="notebook-dialog" aria-labelledby="nbHeading">
  <div class="nb-shell">
-  <header class="nb-header"><div><span class="section-kicker">G2 / DISCOVERY NOTEBOOK</span><h2 id="nbHeading">把好奇，写成一次发现。</h2><p>只存于这台设备的浏览器。导出 JSON 文件可跨设备复算，无需账号。</p></div><button type="button" id="nbClose" class="nb-close" aria-label="关闭发现日志">×</button></header>
+  <header class="nb-header"><div><span class="section-kicker">G2 / DISCOVERY NOTEBOOK · REPRODUCIBLE</span><h2 id="nbHeading">把好奇，写成一次发现。</h2><p>只存于这台设备的浏览器。导出 JSON 文件可跨设备复算，无需账号。</p></div><button type="button" id="nbClose" class="nb-close" aria-label="关闭发现日志">×</button></header>
   <div class="nb-body">
    <section class="nb-editor" aria-label="记录新的研究">
     <span class="nb-overline">01 · 写下想法</span>
@@ -171,7 +171,7 @@
     <p class="nb-hint" id="nbStale" role="status">请打开二维数学世界并完成计算，然后记录不可变快照。</p>
    </section>
    <section class="nb-library" aria-label="已保存的实验">
-    <div class="nb-library-head"><span class="nb-overline">03 · 已保存的实验</span><span id="nbStorageInfo">浏览器本地</span></div>
+    <div class="nb-library-head"><span class="nb-overline">03 · 已保存的实验</span><span id="nbStorageInfo">浏览器本地</span><button class="nb-soft" id="nbNewNotebook" type="button">＋ 新建</button></div>
     <div id="nbList" class="nb-list" aria-live="polite"></div>
     <div class="nb-select-row"><button type="button" class="nb-soft" id="nbRestore" disabled>↺ 恢复所选视图</button><button type="button" class="nb-soft" id="nbReplay" disabled>⌕ 使用同引擎复算</button><button type="button" class="nb-danger" id="nbDelete" disabled>删除</button></div>
     <div class="nb-replay" id="nbReplayOutput" aria-live="polite">复算使用实验包里的固定世界坐标、float32 栅格和已审计预设。两台设备渲染大小不同也不影响数学输入。</div>

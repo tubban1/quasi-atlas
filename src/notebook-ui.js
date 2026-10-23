@@ -1,9 +1,11 @@
 import {createSnapshot,createNotebook,verifyNotebook,migrateG0Experiment,compareSnapshots,notebookAsCSV,MAX_SNAPSHOTS,MAX_FILE_BYTES} from './notebook-core.js';
+import {browserBuildProvenance,NOTEBOOK_PINNED_SCHEMA,compareBuildProvenance} from './repro-metadata.js';
 const STORAGE_KEY='quasi-atlas.g2.notebook/1';
 const fields={question:'nbQuestion',hypothesis:'nbHypothesis',observation:'nbObservation',counterexample:'nbCounterexample',conclusion:'nbConclusion'};
 export function setupNotebook({capture,restore,download,showMessage,isValidField}){
  const $=(id)=>document.getElementById(id),dialog=$('notebookDialog'),worker=new Worker(new URL('./notebook-worker.js',import.meta.url),{type:'module'});
  let snapshots=[],selected=-1,storeWarning='',dirty=false,updateTimer=null,pendingReplay=null,runId=0,lastRenderedCount=-1;
+ let archiveBuild=browserBuildProvenance; // Preserve imported provenance; never falsely re-pin legacy notes.
  const status=(msg,error=false)=>{$('nbStatus').textContent=msg;$('nbStatus').dataset.error=String(error);};
  const getNotes=()=>Object.fromEntries(Object.entries(fields).map(([key,id])=>[key,$(id).value]));
  const setNotes=o=>{for(const [key,id] of Object.entries(fields))$(id).value=o?.[key]||'';};
@@ -26,7 +28,7 @@ export function setupNotebook({capture,restore,download,showMessage,isValidField
  function makeOption(value,label){const opt=document.createElement('option');opt.value=String(value);opt.textContent=label;return opt;}
  function render(){
   $('nbCount').textContent=String(snapshots.length);
-  $('nbStorageInfo').textContent=snapshots.length+'/'+MAX_SNAPSHOTS+' 个永久快照（本机）';
+  $('nbStorageInfo').textContent=snapshots.length+'/'+MAX_SNAPSHOTS+' 个本地快照 · '+(archiveBuild?'源码/依赖已标记':'旧版未标记来源');
   const list=$('nbList');list.replaceChildren();
   if(!snapshots.length){const empty=document.createElement('p');empty.className='nb-empty';empty.textContent='还没有实验快照。先改变工作台里的数值，再点击左侧“记录当前模型”。';list.append(empty);}
   snapshots.forEach((item,i)=>{
@@ -49,7 +51,7 @@ export function setupNotebook({capture,restore,download,showMessage,isValidField
   lastRenderedCount=snapshots.length;renderStale();
  }
  async function persist(){
-  const doc=await createNotebook({title:$('nbTitle').value||'我的数学发现',notes:getNotes(),snapshots});
+  const doc=await createNotebook({title:$('nbTitle').value||'我的数学发现',notes:getNotes(),snapshots,buildProvenance:archiveBuild});
   try{localStorage.setItem(STORAGE_KEY,JSON.stringify(doc));storeWarning='';return doc;}
   catch(err){storeWarning='本地存储不可用。请立即导出 JSON 保存研究。';status(storeWarning,true);return doc;}
  }
@@ -59,18 +61,26 @@ export function setupNotebook({capture,restore,download,showMessage,isValidField
   if(!raw)return;
   if(new Blob([raw]).size>MAX_FILE_BYTES){status('本地缓存超过允许大小，未加载；请手动处理。',true);return;}
   try{const doc=JSON.parse(raw);await verifyNotebook(doc);
-   snapshots=[...doc.snapshots];selected=snapshots.length-1;$('nbTitle').value=doc.title;setNotes(doc.notes);
+   snapshots=[...doc.snapshots];selected=snapshots.length-1;archiveBuild=doc.buildProvenance??null;$('nbTitle').value=doc.title;setNotes(doc.notes);
    render();status('已从本机恢复 '+snapshots.length+' 个实验快照。');
   }catch(err){alertError(err,'本机数据校验失败，未加载');}
  }
  $('openNotebook').addEventListener('click',()=>{render();dialog.showModal();});
  $('nbClose').addEventListener('click',()=>dialog.close());
+ $('nbNewNotebook').addEventListener('click',async()=>{
+  if(snapshots.length&&!confirm('新建会清空这台设备内当前 Notebook。请先导出 JSON 备份，确定继续吗？'))return;
+  snapshots=[];selected=-1;archiveBuild=browserBuildProvenance;lastRenderedCount=-1;
+  $('nbTitle').value='我的数学发现';setNotes({});$('nbLabel').value='';
+  await persist();render();status('已建立本机版本指纹的新笔记本。');
+ });
  dialog.addEventListener('click',ev=>{if(ev.target===dialog)dialog.close();});
  for(const id of ['nbTitle',...Object.values(fields)])$(id).addEventListener('input',queuePersist);
  $('nbCapture').addEventListener('click',async()=>{
   const button=$('nbCapture');if(button.disabled)return;button.disabled=true;status('正在固定数学模型和 E1 观测…');
   try{
    if(snapshots.length>=MAX_SNAPSHOTS)throw Object.assign(new Error('达到 '+MAX_SNAPSHOTS+' 个快照上限，请先导出并整理。'),{code:'SNAPSHOT_LIMIT'});
+   if(archiveBuild&&compareBuildProvenance(archiveBuild,browserBuildProvenance).status!=='COMPATIBLE')
+    throw Object.assign(new Error('当前代码版本与已导入 Notebook 不兼容。先导出备份，再创建本机的新笔记。'),{code:'ENVIRONMENT_MISMATCH'});
    const {view,scientific}=await capture();
    const label=$('nbLabel').value.trim()||('发现 '+(snapshots.length+1)+' · '+view.id+' / '+view.level.toFixed(2));
    const item=await createSnapshot({view,scientific,notes:getNotes(),label});
@@ -121,6 +131,9 @@ export function setupNotebook({capture,restore,download,showMessage,isValidField
  });
  $('nbReplay').addEventListener('click',()=>{
   const snapshot=current();if(!snapshot||pendingReplay)return;
+  if(archiveBuild){const compatibility=compareBuildProvenance(archiveBuild,browserBuildProvenance);
+   if(compatibility.status!=='COMPATIBLE'){$('nbReplayOutput').dataset.status='INVALID';$('nbReplayOutput').textContent='复算已阻止：'+compatibility.status+'。请使用原版本代码和依赖锁文件。';status('运行环境与导入的数学版本不一致',true);return;}}
+  else status('旧版无代码指纹；结果只作为同引擎兼容观察，不代表可追溯版本。');
   const button=$('nbReplay'),id=++runId;button.disabled=true;pendingReplay={id,button,snapshot};
   $('nbReplayOutput').textContent='正在工作线程中从固定数学输入重新生成 float32 网格…';
   worker.postMessage({requestId:id,snapshot});
@@ -141,10 +154,10 @@ export function setupNotebook({capture,restore,download,showMessage,isValidField
   const file=e.target.files?.[0];e.target.value='';if(!file)return;
   try{
    if(file.size>MAX_FILE_BYTES)throw Object.assign(new Error('文件不得超过 2 MB'),{code:'RESOURCE_LIMIT'});
-   const raw=JSON.parse(await file.text());const data=raw.schema==='quasi-atlas.notebook/1.0'?raw:await migrateG0Experiment(raw);await verifyNotebook(data);
+   const raw=JSON.parse(await file.text());const data=['quasi-atlas.notebook/1.0',NOTEBOOK_PINNED_SCHEMA].includes(raw.schema)?raw:await migrateG0Experiment(raw);await verifyNotebook(data);
    if(snapshots.length&&!confirm('确认用导入的 '+data.snapshots.length+' 个快照替换本机当前笔记吗？请先备份原有内容。'))return;
-   snapshots=[...data.snapshots];selected=snapshots.length-1;$('nbTitle').value=data.title;setNotes(data.notes);
-   const saved=await persist();render();status('成功导入 '+saved.snapshots.length+' 个经过哈希与数学契约校验的快照。'+(raw.schema==='quasi-atlas.notebook/1.0'?'':' 已从旧 G0 格式迁移；视图恢复可能是近似的。'));
+   snapshots=[...data.snapshots];selected=snapshots.length-1;archiveBuild=data.buildProvenance??null;$('nbTitle').value=data.title;setNotes(data.notes);
+   const saved=await persist();render();status('成功导入 '+saved.snapshots.length+' 个经过哈希与数学契约校验的快照。'+(['quasi-atlas.notebook/1.0',NOTEBOOK_PINNED_SCHEMA].includes(raw.schema)?'':' 已从旧 G0 格式迁移；视图恢复可能是近似的。'));
   }catch(err){alertError(err,'不可信或不支持的文件，已拒绝导入');}
  });
  load().catch(err=>alertError(err,'Notebook 初始化失败'));

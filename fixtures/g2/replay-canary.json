@@ -1,0 +1,289 @@
+{
+  "schema": "quasi-atlas.notebook/1.1",
+  "engine": "g2-replay/1.0",
+  "title": "G2 portable cross-runtime canary",
+  "notes": {
+    "question": "",
+    "hypothesis": "",
+    "observation": "",
+    "counterexample": "",
+    "conclusion": ""
+  },
+  "snapshots": [
+    {
+      "schema": "quasi-atlas.snapshot/1.0",
+      "label": "Cross-env archipelago",
+      "createdAt": "2026-10-23T23:15:54.937Z",
+      "view": {
+        "id": "archipelago",
+        "level": 0.55,
+        "phase": 0.16,
+        "scale": 17,
+        "panX": 0,
+        "panY": 0,
+        "resolution": 280,
+        "mode": "research",
+        "view": "terrain",
+        "theme": 0
+      },
+      "notes": {
+        "question": "Can a second runtime reproduce the same finite-grid contour statistics?",
+        "hypothesis": "Integer counts identical, length within declared tolerance.",
+        "observation": "Fixture computed by audited same-engine implementation.",
+        "counterexample": "A changed source file or dependencies must mark the environment incompatible.",
+        "conclusion": "Not independently validated mathematics."
+      },
+      "scientific": {
+        "schema": "quasi-atlas.experiment/1.0",
+        "model": {
+          "schema": "quasi-atlas.model/1.0",
+          "id": "archipelago",
+          "source": {
+            "kind": "preset",
+            "id": "archipelago",
+            "definition": "f(x,y) = Σᵢ aᵢ exp(−((x−xᵢ)²+(y−yᵢ)²)/σᵢ²) − 0.25 + 0.12 sin(0.7x+φ)cos(0.9y)",
+            "implementation": "fields.js/0.2"
+          },
+          "parameters": {
+            "phase": 0.16,
+            "level": 0.55
+          },
+          "domain": {
+            "xmin": -17,
+            "xmax": 17,
+            "ymin": -12,
+            "ymax": 12,
+            "coordinateFrame": "cartesian",
+            "boundary": "clipped-rectangle",
+            "units": {
+              "x": "dimensionless",
+              "y": "dimensionless",
+              "f": "dimensionless"
+            }
+          },
+          "sampling": {
+            "nx": 88,
+            "ny": 66,
+            "floatFormat": "float32",
+            "interpolation": "bilinear"
+          }
+        },
+        "result": {
+          "stats": {
+            "components": 3,
+            "closed": 0,
+            "boundary": 3,
+            "totalLength": 57.938295309947094
+          },
+          "algorithm": "marching-squares-bilinear-asymptotic-decider-v2",
+          "evidence": {
+            "level": "E1",
+            "claim": "当前有限采样区域的等值线计数与长度估计",
+            "scope": "finite-domain",
+            "status": "numerical-observation",
+            "warnings": [
+              "有限窗口中的边界穿越不证明全局无界",
+              "当前采样网格和插值可能漏掉小尺度结构"
+            ],
+            "certified": false,
+            "proof": false
+          }
+        },
+        "notes": "G2 cross-environment canary",
+        "engineVersion": "g0.1",
+        "scientificHash": "sha256:7eca17b1f5ea2eb5eb667a6e02cd93c24eabf6997a5e99fffddb9ca927891d04",
+        "createdAt": "2026-10-23T23:15:54.936Z"
+      },
+      "snapshotHash": "sha256:c752bac4c369cbb091b58e03fca1ca7eec12561331613bcd75bf8d38eb8e5378"
+    },
+    {
+      "schema": "quasi-atlas.snapshot/1.0",
+      "label": "Cross-env saddle",
+      "createdAt": "2026-10-23T23:15:54.940Z",
+      "view": {
+        "id": "saddle",
+        "level": 0.04,
+        "phase": 0.2,
+        "scale": 13,
+        "panX": 0,
+        "panY": 0,
+        "resolution": 280,
+        "mode": "research",
+        "view": "terrain",
+        "theme": 0
+      },
+      "notes": {
+        "question": "Can a second runtime reproduce the same finite-grid contour statistics?",
+        "hypothesis": "Integer counts identical, length within declared tolerance.",
+        "observation": "Fixture computed by audited same-engine implementation.",
+        "counterexample": "A changed source file or dependencies must mark the environment incompatible.",
+        "conclusion": "Not independently validated mathematics."
+      },
+      "scientific": {
+        "schema": "quasi-atlas.experiment/1.0",
+        "model": {
+          "schema": "quasi-atlas.model/1.0",
+          "id": "saddle",
+          "source": {
+            "kind": "preset",
+            "id": "saddle",
+            "definition": "f(x,y) = 0.025(x² − y²) + 0.11 cos(0.8x + φ)",
+            "implementation": "fields.js/0.2"
+          },
+          "parameters": {
+            "phase": 0.2,
+            "level": 0.04
+          },
+          "domain": {
+            "xmin": -13,
+            "xmax": 13,
+            "ymin": -10,
+            "ymax": 10,
+            "coordinateFrame": "cartesian",
+            "boundary": "clipped-rectangle",
+            "units": {
+              "x": "dimensionless",
+              "y": "dimensionless",
+              "f": "dimensionless"
+            }
+          },
+          "sampling": {
+            "nx": 88,
+            "ny": 66,
+            "floatFormat": "float32",
+            "interpolation": "bilinear"
+          }
+        },
+        "result": {
+          "stats": {
+            "components": 2,
+            "closed": 0,
+            "boundary": 2,
+            "totalLength": 55.788478281279836
+          },
+          "algorithm": "marching-squares-bilinear-asymptotic-decider-v2",
+          "evidence": {
+            "level": "E1",
+            "claim": "当前有限采样区域的等值线计数与长度估计",
+            "scope": "finite-domain",
+            "status": "numerical-observation",
+            "warnings": [
+              "有限窗口中的边界穿越不证明全局无界",
+              "当前采样网格和插值可能漏掉小尺度结构"
+            ],
+            "certified": false,
+            "proof": false
+          }
+        },
+        "notes": "G2 cross-environment canary",
+        "engineVersion": "g0.1",
+        "scientificHash": "sha256:5842fc120ace9e69c68feba27b42a6331c61878524b7d39faa532ee0b8f36664",
+        "createdAt": "2026-10-23T23:15:54.940Z"
+      },
+      "snapshotHash": "sha256:d23f6ef426fbc3ec3261a7e769c78d01945a50d7966c397facc34db62dfe395a"
+    },
+    {
+      "schema": "quasi-atlas.snapshot/1.0",
+      "label": "Cross-env quasi",
+      "createdAt": "2026-10-23T23:15:54.952Z",
+      "view": {
+        "id": "quasi",
+        "level": 0.5,
+        "phase": 0.11,
+        "scale": 16,
+        "panX": 0,
+        "panY": 0,
+        "resolution": 280,
+        "mode": "research",
+        "view": "terrain",
+        "theme": 0
+      },
+      "notes": {
+        "question": "Can a second runtime reproduce the same finite-grid contour statistics?",
+        "hypothesis": "Integer counts identical, length within declared tolerance.",
+        "observation": "Fixture computed by audited same-engine implementation.",
+        "counterexample": "A changed source file or dependencies must mark the environment incompatible.",
+        "conclusion": "Not independently validated mathematics."
+      },
+      "scientific": {
+        "schema": "quasi-atlas.experiment/1.0",
+        "model": {
+          "schema": "quasi-atlas.model/1.0",
+          "id": "quasi",
+          "source": {
+            "kind": "preset",
+            "id": "quasi",
+            "definition": "f(x,y) = cos(x) + cos(y) + cos(√2x + √3y) + cos(√5x − √7y)",
+            "implementation": "fields.js/0.2"
+          },
+          "parameters": {
+            "phase": 0.11,
+            "level": 0.5
+          },
+          "domain": {
+            "xmin": -16,
+            "xmax": 16,
+            "ymin": -11,
+            "ymax": 11,
+            "coordinateFrame": "cartesian",
+            "boundary": "clipped-rectangle",
+            "units": {
+              "x": "dimensionless",
+              "y": "dimensionless",
+              "f": "dimensionless"
+            }
+          },
+          "sampling": {
+            "nx": 88,
+            "ny": 66,
+            "floatFormat": "float32",
+            "interpolation": "bilinear"
+          }
+        },
+        "result": {
+          "stats": {
+            "components": 72,
+            "closed": 51,
+            "boundary": 21,
+            "totalLength": 488.2283968173891
+          },
+          "algorithm": "marching-squares-bilinear-asymptotic-decider-v2",
+          "evidence": {
+            "level": "E1",
+            "claim": "当前有限采样区域的等值线计数与长度估计",
+            "scope": "finite-domain",
+            "status": "numerical-observation",
+            "warnings": [
+              "有限窗口中的边界穿越不证明全局无界",
+              "当前采样网格和插值可能漏掉小尺度结构"
+            ],
+            "certified": false,
+            "proof": false
+          }
+        },
+        "notes": "G2 cross-environment canary",
+        "engineVersion": "g0.1",
+        "scientificHash": "sha256:e186da3f026f5d6cc51c806c9c44c632ad38fedd1faa78e7fe7c369f853469b6",
+        "createdAt": "2026-10-23T23:15:54.951Z"
+      },
+      "snapshotHash": "sha256:599512dfda2d195eb62567b5206fc388bfc183ad2d45dc09cdecf901285d3bcf"
+    }
+  ],
+  "provenance": {
+    "source": "audited-synthetic-presets",
+    "storage": "local-first",
+    "networkUpload": false,
+    "certified": false,
+    "warning": "G2 hash checks integrity, not identity, authenticity or mathematical proof."
+  },
+  "buildProvenance": {
+    "schema": "quasi-atlas.build-provenance/1.0",
+    "gitCommit": "08c95ab15daea9b5b36c8b3bd30471861a2d1fac",
+    "lockSha256": "sha256:66fd2f12727bb16df9cc30aa22c28618313e44826fdba397c49637c8c751b1a4",
+    "mathSourceSha256": "sha256:3393c7753462b46ba042704f88e0a67d8c45eabd53b34f1070dcf60f42f42bc0",
+    "packageVersion": "0.5.0-beta.2",
+    "engine": "g2-replay/1.0"
+  },
+  "notebookHash": "sha256:f1f804752d9db7d416a2e0309601a403aeb5120635256d3dfda8a3063ff9586e",
+  "exportedAt": "2026-10-23T23:15:55.117Z"
+}

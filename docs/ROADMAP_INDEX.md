@@ -2,7 +2,7 @@
 
 **制定日期：2026-10-23 | 原基线 0.2；截至 2026-10-24，G0/G1 工程已实施，G2 Notebook Beta 正在验收；跨物理设备复算、教育实证及真实开放数据仍待验收。**
 
-G2 当前实施、复算协议与限制见 [G2_NOTEBOOK_REPLAY.md](G2_NOTEBOOK_REPLAY.md)。全新 UI 信息架构见 [UI_2_INFORMATION_ARCHITECTURE.md](UI_2_INFORMATION_ARCHITECTURE.md)，生产研发流程见 [G1_CICD_RUNBOOK.md](G1_CICD_RUNBOOK.md)，实际 G1 验收与 GitHub Actions 账单阻塞见 [G1_DELIVERY_REPORT.md](G1_DELIVERY_REPORT.md)。
+G2 当前实施、复算协议与限制见 [G2_NOTEBOOK_REPLAY.md](G2_NOTEBOOK_REPLAY.md)，跨环境验证命令与证据要求见 [G2_CROSS_RUNTIME_QUALIFICATION.md](G2_CROSS_RUNTIME_QUALIFICATION.md)。全新 UI 信息架构见 [UI_2_INFORMATION_ARCHITECTURE.md](UI_2_INFORMATION_ARCHITECTURE.md)，生产研发流程见 [G1_CICD_RUNBOOK.md](G1_CICD_RUNBOOK.md)，实际 G1 验收与 GitHub Actions 账单阻塞见 [G1_DELIVERY_REPORT.md](G1_DELIVERY_REPORT.md)。
 
 > 一句话：从看见生活中的数学，到亲自提出可证伪猜想，再到可信赖、可复现的科学实验。产品允许人人进入；研究级结论必须遵守严格限定。
 
@@ -17,7 +17,7 @@ G2 当前实施、复算协议与限制见 [G2_NOTEBOOK_REPLAY.md](G2_NOTEBOOK_R
 ## 总路线图 / 发布门禁
 
 ~~~text
-当前 v0.5.0-beta.1：G0/G1 已实施，G2 Notebook 工程 Beta（跨机器验证待完成）
+当前 v0.5.0-beta.2：G0/G1 已实施，G2 Notebook 工程 Beta（跨机器验证待完成）
      |
 G0 科学地基 ── 定义、12 golden fixtures、可靠数据/证据 schema
      |

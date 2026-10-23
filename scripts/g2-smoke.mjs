@@ -46,7 +46,9 @@ try{
  const dlPromise=page.waitForEvent('download',{timeout:15000});
  await page.locator('#nbExportJSON').click();const downloaded=await dlPromise;
  const path=await downloaded.path(),notebook=JSON.parse(await readFile(path,'utf8'));
- assert.equal(notebook.schema,'quasi-atlas.notebook/1.0');
+ assert.equal(notebook.schema,'quasi-atlas.notebook/1.1');
+ assert.match(notebook.buildProvenance.mathSourceSha256,/^sha256:[a-f0-9]{64}$/);
+ assert.match(notebook.buildProvenance.lockSha256,/^sha256:[a-f0-9]{64}$/);
  assert.equal(notebook.snapshots.length,2);
  const cli=spawnSync(process.execPath,['scripts/replay-notebook.mjs',path],{encoding:'utf8',timeout:30000});
  assert.equal(cli.status,0,'CLI '+cli.stderr);const report=JSON.parse(cli.stdout);

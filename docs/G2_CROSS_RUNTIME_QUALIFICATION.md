@@ -1,0 +1,77 @@
+# G2 · Cross-runtime Replay Qualification
+
+Version 0.5.0-beta.2 · 2026-10-24. **This document separates demonstrated engineering compatibility from still-unverified physical Windows acceptance.**
+
+## What is new
+
+The default new Notebook uses "quasi-atlas.notebook/1.1" (legacy "quasi-atlas.notebook/1.0" remains readable). The 1.1 archive adds buildProvenance:
+- gitCommit: source revision recorded by the producing Vite build
+- mathSourceSha256: canonical SHA-256 of src/math/fields.js, src/math/contours.js, src/math/contract.js and src/notebook-core.js in fixed file/path order
+- lockSha256: SHA-256 of the exact package-lock.json
+- packageVersion and G2 engine identity
+
+These fields are covered by the Notebook SHA-256. **They are NOT a digital signature or proof of author identity**; users can generate a new hash. They provide reproducibility diagnostics and explain provenance differences.
+
+All new browser exports include this information; imported pinned files retain the original source/lock fingerprint. If an archive's pinned mathematical source or lockfile differs from the running version, the UI blocks a new snapshot or replay and reports ENVIRONMENT_MISMATCH. The user can export the original file and create a fresh local Notebook (button "＋ 新建"). A legacy 1.0 archive stays explicitly unpinned rather than being silently attributed to the new codebase.
+
+Commit changes with identical source and lockfile are tracked but do not by themselves prevent compatible replay. Engine and domain/schema validation, integer counts and contour-length tolerance remain mandatory.
+
+## Fixed canary and acceptance
+
+The exact checked-in file is fixtures/g2/replay-canary.json and includes 3 datasets: archipelago, saddle and quasi. It is a finite-grid E1 audit, not a topology proof.
+
+The same file is evaluated in at least two different execution environments using Node >=22 and the identical mathematical source/lockfile. Each run records:
+- notebook SHA-256 and each snapshot SHA-256
+- local math implementation SHA-256 and npm lock SHA-256
+- operating system, CPU architecture, Node major
+- closed/boundary/component integer contour counts and contour-length approximation
+
+All integer counts must match exactly; length comparison tolerates at most 1e-5 + 1e-5 × max(|length A|, |length B|). The comparison script rejects two receipts from the same OS/architecture (for example two macOS processes) as insufficient cross-runtime evidence. It does not prove two physically separate devices when runtime labels are not independently attested.
+
+## Run on Mac
+
+From the repository root, with Node >=22:
+
+    npm ci
+    npm run gate
+    node scripts/canary-receipt.mjs fixtures/g2/replay-canary.json --out mac-receipt.json
+
+mac-receipt.json is a local test report, not user-source data. Do not commit personal test logs.
+
+## Run on Windows (requires online authorized Windows computer)
+
+Using PowerShell in an authorized clone of the **same commit**:
+
+    git clone https://github.com/tubban1/quasi-atlas.git
+    cd quasi-atlas
+    node --version
+    npm ci
+    node scripts/replay-notebook.mjs fixtures/g2/replay-canary.json --receipt windows-full-report.json
+    node scripts/canary-receipt.mjs fixtures/g2/replay-canary.json --out windows-receipt.json
+
+The private repository requires GitHub access. Transfer the actual JSON receipt to Mac with an authorized method, then run:
+
+    node scripts/compare-canary-receipts.mjs mac-receipt.json windows-receipt.json
+
+The script returns MATCH only for two distinct platform/architecture labels with identical source/lock and notebook hashes, exact contour counts and acceptable numeric length differences. On Windows, filesystem paths and terminals use platform-native syntax; the Node scripts are cross-platform.
+
+## Mac and Vercel Linux
+
+Vercel builds the GitHub commit on Linux, runs the scientific gate (at least 67 tests) and repeats the **identical** fixtures/g2/replay-canary.json. Build logs include one concise G2_CANARY_RECEIPT record containing source/lock and the computed results. Compare this to the Mac receipt using scripts/compare-canary-receipts.mjs. This is two distinct execution environments but does not replace a Windows device acceptance.
+
+## Failure codes
+
+- Invalid/tampered/unrecognized Notebook: exit 2; no execution of imported expression/source.
+- Valid pinned archive, math or lock mismatch: ENVIRONMENT_MISMATCH, exit 3; no false green MATCH.
+- Same compatible engine but different computed counts or length: DIFFERENT, exit 1.
+- Valid matching result: MATCH, exit 0; intra-engine deterministic replay only.
+- 1.0 legacy: LEGACY_UNPINNED, replay possible, but source identity unavailable and never backfilled dishonestly.
+- Failed canary or two receipts from the same OS/arch: CROSS_RUNTIME_UNVERIFIED, nonzero exit.
+
+## Evidence status and remaining limitations
+
+Mac local results and Vercel Linux results are measured separately. They must be compared using the same pinned fixture before reporting G2 cross-runtime engineering qualification. The user's Windows device is **not currently connected to OWL LAB**; no Windows test can be claimed until that device is online and authorized.
+
+The test receipts do not establish code signing, external numerical oracle equivalence, independent GUDHI/TTK verification, exact GPU/CPU visual identity, formal numerical certification or mathematical proof. Higher evidence tiers remain planned for G3/G4.
+
+No actual personal notebooks or secrets should be uploaded to GitHub, Vercel or Cloudflare as part of this test.
