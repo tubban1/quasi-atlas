@@ -19,7 +19,7 @@ const palettes=[
  [[13,22,26],[39,65,66],[65,93,79],[120,139,102],[182,174,128],[227,203,150],[250,228,193]]
 ];
 const bgForTheme=['#092e38','#0d1c32','#152521'];
-let baseline=null;
+let baseline=null,latestVerification=null,criticalResult=null,criticalSignature='',researchRequest=0,focusPoint=null;
 let raster=document.createElement('canvas'),rctx=raster.getContext('2d'),refreshTimer=null,playTime=0,toastTimer=null;
 const fmt=n=>(n>=0?'+':'')+Number(n).toFixed(2);
 const finite=(n,fallback=0)=>Number.isFinite(n)?n:fallback;
@@ -63,14 +63,16 @@ function updateInsights(){
 function computeSize(){const box=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);if(box.width<1||box.height<1)return;
   state.resizeWidth=box.width;state.resizeHeight=box.height;canvas.width=Math.round(box.width*dpr);canvas.height=Math.round(box.height*dpr);schedule();
 }
-function schedule(){clearTimeout(refreshTimer);refreshTimer=setTimeout(calculate,38);}
+function schedule(){clearTimeout(refreshTimer);refreshTimer=setTimeout(calculate,38);if(latestVerification){$('#verificationOutput').dataset.stale=String(experimentSignature()!==latestVerification.signature);if($('#verificationOutput').dataset.stale==='true')$('#verificationOutput').innerHTML='<span>参数已改变。上次报告仍可导出，但请重新运行三档精度验证。</span>';}}
 function calculate(){
  if(!state.resizeWidth)return;state.seq++;
  $('#numericStatus').textContent='计算中…';
  worker.postMessage({seq:state.seq,id:state.id,level:state.level,phase:state.phase,scale:state.scale,panX:state.panX,panY:state.panY,resolution:state.resolution,width:state.resizeWidth,height:state.resizeHeight});
 }
 worker.onmessage=ev=>{
- const m=ev.data;if(m.error){$('#numericStatus').textContent='计算失败';console.error(m.error);toast('计算失败，请查看控制台');return;}
+ const m=ev.data;
+ if(m.action==='critical'||m.action==='verify'){handleResearchResponse(m);return;}
+ if(m.error){$('#numericStatus').textContent='计算失败';console.error(m.error);toast('计算失败，请查看控制台');return;}
  // Always retain a grid received from worker; it may be reused for subsequent contour requests.
  if(m.gridChanged&&m.grid){state.grid=m.grid;state.coords=m.coords;rasterDirty=true;}
  if(m.seq!==state.seq)return;
@@ -124,6 +126,14 @@ function render(){
    if(path.closed)ctx.closePath();ctx.stroke();
   }
  }
+ if(criticalResult&&criticalSignature===geometrySignature()){
+  const points=criticalResult.points.filter(p=>Math.abs(p.value-state.level)<.55).slice(0,28);
+  for(const cp of points){const [cx,cy]=transformPoint([cp.x,cp.y]);if(cx<0||cy<0||cx>canvas.width||cy>canvas.height)continue;
+   const radius=5*Math.min(devicePixelRatio||1,2);
+   ctx.beginPath();ctx.arc(cx,cy,radius,0,Math.PI*2);
+   ctx.fillStyle=cp.type==='saddle'?'rgba(239,176,114,.95)':'rgba(194,248,229,.93)';ctx.fill();ctx.lineWidth=1.4;ctx.strokeStyle='#173844';ctx.stroke();
+  }
+ }
  if(state.pin){
   const [px,py]=transformPoint([state.pin.x,state.pin.y]);
   if(px>=0&&px<=canvas.width&&py>=0&&py<=canvas.height){ctx.strokeStyle='#fff5d8';ctx.lineWidth=2;ctx.beginPath();ctx.arc(px,py,8*Math.min(devicePixelRatio||1,2),0,Math.PI*2);ctx.stroke();}
@@ -146,7 +156,7 @@ function renderSpectrum(){
  const el=$('#eventTrack');if(!state.spectrum)return;const p=preset();
  const arr=state.spectrum.events;$('#eventCount').textContent=arr.length+' 次采样差异';
  el.innerHTML='<div class="event-bed"></div>'+arr.map(e=>'<button class="event-mark" data-level="'+e.level+'" style="left:'+((e.level-p.min)/(p.max-p.min)*100).toFixed(2)+'%; height:'+Math.min(24,7+e.delta*2)+'px" title="跳转至高度 '+e.level.toFixed(2)+'"></button>').join('');
- el.querySelectorAll('button').forEach(b=>b.onclick=()=>{setLevel(Number(b.dataset.level));toast('跳转到结构变化附近；这只是离散扫描得到的候选位置。');});
+ el.querySelectorAll('button').forEach(b=>b.onclick=()=>{setLevel(Number(b.dataset.level));toast('已定位到变化候选的高度。下一步可寻找临界点或做三档精度验证。');});
 }
 function setLevel(v){const p=preset();state.level=safe(v,p.min,p.max);$('#levelSlider').value=state.level;$('#levelValue').textContent=fmt(state.level);schedule();saveURL();}
 function saveURL(){const params=new URLSearchParams();params.set('world',state.id);params.set('level',state.level.toFixed(3));params.set('phase',state.phase.toFixed(3));params.set('scale',state.scale.toFixed(2));params.set('x',state.panX.toFixed(3));params.set('y',state.panY.toFixed(3));params.set('res',state.resolution);history.replaceState(null,'',location.pathname+'?'+params.toString());}
@@ -186,10 +196,59 @@ document.addEventListener('keydown',ev=>{if(ev.code==='Space'&&ev.target.tagName
 function toast(txt){const el=$('#toast');el.textContent=txt;el.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('visible'),3400);}
 async function share(){saveURL();try{await navigator.clipboard.writeText(location.href);toast('实验链接已复制。分享后可恢复参数、观察窗口与高度。');}catch{prompt('复制实验链接',location.href);}}
 $('#copyLink').onclick=share;$('#copyState').onclick=share;
+
+function geometrySignature(){return JSON.stringify([state.id,state.phase,state.panX,state.panY,state.scale,state.resizeWidth,state.resizeHeight]);}
+function experimentSignature(){return JSON.stringify([state.id,state.phase,state.panX,state.panY,state.scale,state.resizeWidth,state.resizeHeight,state.level]);}
+function researchPayload(action){
+ return {action,requestId:++researchRequest,signature:action==='critical'?geometrySignature():experimentSignature(),id:state.id,phase:state.phase,level:state.level,scale:state.scale,panX:state.panX,panY:state.panY,width:state.resizeWidth,height:state.resizeHeight};
+}
+function runCritical(){const button=$('#findCritical');button.disabled=true;$('#criticalList').textContent='正在扫描局部驻点，并计算梯度与 Hessian…';worker.postMessage(researchPayload('critical'));}
+function runVerification(){const button=$('#verifyGrid');button.disabled=true;$('#verificationOutput').textContent='正在计算 120、220、340 三组网格和相邻三个高度…';worker.postMessage(researchPayload('verify'));}
+$('#findCritical').onclick=runCritical;$('#verifyGrid').onclick=runVerification;
+function handleResearchResponse(m){
+ const button=$(m.action==='critical'?'#findCritical':'#verifyGrid');button.disabled=false;
+ if(m.error){toast('研究检查发生错误');console.error(m.error);return;}
+ const expected=m.action==='critical'?geometrySignature():experimentSignature();
+ if(m.signature!==expected){toast('地图参数已变化，旧计算被忽略。请重新运行检查。');return;}
+ if(m.action==='critical'){
+   criticalResult=m.result;criticalSignature=m.signature;
+   const list=$('#criticalList');
+   const sorted=[...m.result.points].sort((a,b)=>Math.abs(a.value-state.level)-Math.abs(b.value-state.level)).slice(0,8);
+   if(!sorted.length){list.textContent='此窗口尚未发现满足数值阈值的候选驻点。试着扩大探索区域。';}
+   else{const tags={saddle:'鞍点',minimum:'局部极小',maximum:'局部极大'};
+     list.innerHTML=sorted.map((p,i)=>'<button class="critical-point" data-index="'+i+'"><span>◈ '+tags[p.type]+' <small>('+p.x.toFixed(2)+', '+p.y.toFixed(2)+')</small></span><small>f='+p.value.toFixed(3)+'</small></button>').join('');
+     list.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+      const p=sorted[Number(b.dataset.index)];state.panX=p.x;state.panY=p.y;state.scale=Math.max(5,Math.min(state.scale*.47,12));
+      $('#scaleSlider').value=state.scale;$('#scaleValue').textContent=state.scale.toFixed(1);
+      state.pin={x:p.x,y:p.y};$('#pin').hidden=false;$('#pinValue').textContent='f(x, y) = '+p.value.toFixed(5);
+      $('#pinCoords').textContent='x = '+p.x.toFixed(3)+'   y = '+p.y.toFixed(3);
+      setLevel(p.value+Math.min(.04,(getPreset(state.id).max-getPreset(state.id).min)*.01));saveURL();
+      toast('已进入局部显微镜视图；可运行三档精度验证。');
+     });
+   }
+   render();
+   toast('已找到 '+m.result.points.length+' 个数值驻点候选（不等于已证明的临界点）。');
+ } else{
+    latestVerification={signature:m.signature,...m.result};
+    const checks=m.result.checks,yes=checks.filter(c=>c.comparison.flag==='consistent').length;
+    $('#verificationOutput').dataset.stale='false';
+    $('#verificationOutput').innerHTML='<strong>'+(yes===3?'三档网格观察一致':'仍需加密网格')+'</strong><br/><span>'+yes+'/3 个高度邻域符合相邻两档计数一致、曲线长度差 < 4.5% 的经验阈值。</span><br/>'+
+      checks.map(c=>'c='+c.level.toFixed(3)+'：闭合 '+c.rows.map(r=>r.closed).join(' → ')+' · 漂移 '+(100*c.comparison.lengthDrift).toFixed(1)+'%').join('<br/>')+
+      '<br/><span>仅为有限窗口的启发式数值检查，不是数学证明。</span>';
+    $('#downloadReport').disabled=false;
+    toast('已完成三档采样：'+yes+'/3 高度层符合观察一致性阈值。');
+ }
+}
+$('#downloadReport').onclick=()=>{
+ if(!latestVerification)return;
+ const out={project:'Quasi Atlas',version:'0.2',experiment:{world:state.id,formula:preset().formula},verified:latestVerification,disclaimer:'Heuristic finite-domain grid sampling. Stability is not a proof.'};
+ downloadBlob(JSON.stringify(out,null,2),filename('verification.json'),'application/json');
+};
+
 function downloadBlob(data,name,type){const blob=new Blob([data],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function filename(ext){return 'quasi-atlas-'+state.id+'-c'+state.level.toFixed(2)+'-'+Date.now()+'.'+ext;}
 $('#saveSnapshot').onclick=()=>{if(!state.contour)return;canvas.toBlob(blob=>{if(!blob)return;const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename('png');a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('PNG 已导出');},'image/png');};
-$('#exportData').onclick=()=>{if(!state.contour)return;const out={project:'Quasi Atlas',version:'0.1',generatedAt:new Date().toISOString(),scientificNotice:'Finite window numerical estimate. Boundary crossing does not prove unboundedness.',formula:preset().formula,parameters:{preset:state.id,level:state.level,phase:state.phase,scale:state.scale,panX:state.panX,panY:state.panY,gridResolution:state.resolution},sampling:state.coords,stats:state.contour.stats,baseline,algorithm:state.contour.algorithm,spectrum:state.spectrum,contours:state.contour.paths.map(p=>({closed:p.closed,touchesBoundary:p.touchesBoundary,length:p.length,points:p.points}))};downloadBlob(JSON.stringify(out,null,2),filename('json'),'application/json');toast('实验数据（含曲线坐标）已导出');};
+$('#exportData').onclick=()=>{if(!state.contour)return;const out={project:'Quasi Atlas',version:'0.1',generatedAt:new Date().toISOString(),scientificNotice:'Finite window numerical estimate. Boundary crossing does not prove unboundedness.',formula:preset().formula,parameters:{preset:state.id,level:state.level,phase:state.phase,scale:state.scale,panX:state.panX,panY:state.panY,gridResolution:state.resolution},sampling:state.coords,stats:state.contour.stats,baseline,verification:latestVerification,criticalCandidates:criticalResult,algorithm:state.contour.algorithm,spectrum:state.spectrum,contours:state.contour.paths.map(p=>({closed:p.closed,touchesBoundary:p.touchesBoundary,length:p.length,points:p.points}))};downloadBlob(JSON.stringify(out,null,2),filename('json'),'application/json');toast('实验数据（含曲线坐标）已导出');};
 $('#exportSvg').onclick=()=>{if(!state.contour)return;const c=state.coords;let n=0;const paths=state.contour.paths.map(p=>{if(p.points.length<2)return '';n++;return '<path d="'+p.points.map((xy,i)=>{const x=(xy[0]-c.x0)/(c.dx*c.nx)*1400,y=(xy[1]-c.y0)/(c.dy*c.ny)*900;return (i?'L':'M')+x.toFixed(2)+','+y.toFixed(2);}).join(' ')+(p.closed?' Z':'')+'" />';}).join('');const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900"><rect width="1400" height="900" fill="#082c37"/><g fill="none" stroke="#f4e9c9" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">'+paths+'</g><text x="35" y="55" fill="#f4e9c9" font-family="sans-serif" font-size="20">QUASI ATLAS · '+state.id+' · c = '+state.level.toFixed(3)+'</text></svg>';downloadBlob(svg,filename('svg'),'image/svg+xml');toast(n+' 条曲线已导出 SVG');};
 const ro=new ResizeObserver(computeSize);ro.observe(wrap);window.addEventListener('resize',computeSize);
 state.id=preset().id;state.level=safe(state.level,preset().min,preset().max);state.phase=safe(state.phase,-3.14,3.14);state.scale=safe(state.scale,5,58);state.resolution=safe(state.resolution,160,560);

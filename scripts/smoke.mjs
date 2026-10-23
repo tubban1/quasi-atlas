@@ -4,7 +4,7 @@ try{browser=await chromium.launch({channel:'chrome',headless:true});}catch(e){br
 const page=await browser.newPage({viewport:{width:1440,height:900},deviceScaleFactor:1});
 page.on('pageerror',e=>errors.push(String(e)));
 page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
-await page.goto('http://127.0.0.1:5174/',{waitUntil:'domcontentloaded'});
+await page.goto(process.env.QUASI_URL||'http://127.0.0.1:5188/',{waitUntil:'domcontentloaded'});
 await page.waitForFunction(()=>document.querySelector('#numericStatus')?.textContent==='计算完成',{timeout:15000});
 await page.waitForTimeout(700);
 await page.screenshot({path:'docs/desktop-1440.png',fullPage:true});
@@ -18,15 +18,23 @@ await page.locator('#levelSlider').evaluate(el=>{el.value='1.2';el.dispatchEvent
 await page.waitForFunction(()=>document.querySelector('#numericStatus')?.textContent==='计算完成',{timeout:15000});
 await page.waitForTimeout(600);
 const comparison=await page.locator('#comparisonReadout').textContent();
+
+await page.locator('#findCritical').click();
+await page.waitForFunction(()=>!document.querySelector('#findCritical').disabled,{timeout:20000});
+const criticalText=await page.locator('#criticalList').textContent();
+await page.locator('#verifyGrid').click();
+await page.waitForFunction(()=>!document.querySelector('#verifyGrid').disabled,{timeout:25000});
+const verificationText=await page.locator('#verificationOutput').textContent();
+if(!verificationText.includes('网格') && !verificationText.includes('高度'))errors.push('verification output missing');
 await page.locator('.mode[data-mode="research"]').click();
 await page.locator('#viewToggle').click();
 await page.screenshot({path:'docs/research-1440.png',fullPage:true});
 const mobile=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});
 mobile.on('pageerror',e=>errors.push('mobile:'+String(e)));
-await mobile.goto('http://127.0.0.1:5174/',{waitUntil:'domcontentloaded'});
+await mobile.goto(process.env.QUASI_URL||'http://127.0.0.1:5188/',{waitUntil:'domcontentloaded'});
 await mobile.waitForFunction(()=>document.querySelector('#numericStatus')?.textContent==='计算完成',{timeout:15000});
 await mobile.waitForTimeout(700);
 await mobile.screenshot({path:'docs/mobile-390.png',fullPage:true});
-console.log(JSON.stringify({first,changed,comparison,researchTitle:await page.locator('#inspectorHeading').textContent(),mobileTitle:await mobile.title(),errors},null,2));
+console.log(JSON.stringify({first,changed,comparison,researchTitle:await page.locator('#inspectorHeading').textContent(),mobileTitle:await mobile.title(),criticalText:criticalText?.slice(0,150),verificationText:verificationText?.slice(0,240),errors},null,2));
 await browser.close();
 if(errors.length)process.exitCode=1;

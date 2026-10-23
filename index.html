@@ -46,6 +46,15 @@
  <div class="big-stat"><div class="big-number" id="totalLines">—</div><div class="stat-desc">当前等值线连通分量<br/><small>由网格追踪，随分辨率变化</small></div></div>
  <div class="stats-row"><div><strong id="closedCount">—</strong><span>闭合曲线</span></div><div><strong id="openCount">—</strong><span>接触视窗边界</span></div><div><strong id="totalLength">—</strong><span>估计曲线总长</span></div></div>
  <div class="comparison"><button id="setBaseline">＋ 固定当前状态作对照</button><div id="comparisonReadout">建立基准后，观察改变高度或相位会怎样影响结构。</div></div>
+ <div class="discovery-card" id="discoveryCard">
+    <div class="eyebrow">05 / DISCOVERY STATION</div>
+    <h3>验证你的发现</h3>
+    <p>先找可疑结构，再用三种网格分辨率观察：细节会不会消失？</p>
+    <div class="discover-actions"><button id="findCritical">✧ 寻找临界点</button><button id="verifyGrid">⌕ 三档精度验证</button></div>
+    <div id="criticalList" class="critical-list" aria-live="polite">点击“寻找临界点”，扫描当前窗口内的局部极值和鞍点。</div>
+    <div class="verification-output" id="verificationOutput" aria-live="polite">尚未执行稳定性检查。</div>
+    <button id="downloadReport" class="report-button" disabled>↓ 导出验证报告 JSON</button>
+   </div>
  <div class="scientific-note" id="scientificNote">一条线接触画布边界，并不意味着它在无限平面上无界。</div>
  <div class="section-heading"><span>03</span><b>改变生成规则</b></div>
  <div class="param"><div class="param-label"><label for="scaleSlider">探索尺度 <small>VIEW SCALE</small></label><strong id="scaleValue">22.0</strong></div><input class="range" type="range" id="scaleSlider" min="5" max="58" step=".5" value="22"/></div>
@@ -55,7 +64,7 @@
  <div class="button-grid"><button id="saveSnapshot" class="action primary">↓ &nbsp;高清 PNG</button><button id="exportData" class="action">⇥ &nbsp;数据 JSON</button><button id="exportSvg" class="action">◇ &nbsp;曲线 SVG</button><button id="copyState" class="action">↗ &nbsp;实验链接</button></div>
  <div class="mode-insight" id="modeInsight"><span class="eyebrow">THE DISCOVERY LENS</span><h3>观察，而不是猜测。</h3><p>试着沿着事件轴移动：同一张地图会改变其拓扑结构。</p></div>
  <details class="formula"><summary>∑ &nbsp;查看数学定义与限制 <span>⌄</span></summary><div id="formulaText"></div></details>
- <div class="footer-note">Quasi Atlas 0.1 · 数值现象 ≠ 数学证明。<br/>研究用途请记录网格尺度和边界条件。</div>
+ <div class="footer-note">Quasi Atlas 0.2 · 数值现象 ≠ 数学证明。<br/>研究用途请记录网格尺度和边界条件。</div>
 </div></aside>
 </div><div id="toast" role="status" aria-live="polite"></div>
 </div>

@@ -14,7 +14,9 @@ export function extractContours(values,nx,ny,level,dx=1,dy=1,x0=0,y0=0,{minPoint
     if(mask===0||mask===15)continue;
     let connections=pairs[mask];
     if(mask===5 ||mask===10) {
-      const highCentre=(v0+v1+v2+v3)*.25>level;
+      const denom=v0-v1+v2-v3;
+      const saddleValue=Math.abs(denom)>1e-10?(v0*v2-v1*v3)/denom:(v0+v1+v2+v3)*.25;
+      const highCentre=saddleValue>level;
       // Surround connected centres on the same side, resolving checkerboard ambiguity.
       connections=(mask===5)==highCentre?[[0,1],[2,3]]:[[3,0],[1,2]];
     }
@@ -45,11 +47,11 @@ export function extractContours(values,nx,ny,level,dx=1,dy=1,x0=0,y0=0,{minPoint
   for(const [key,edges] of adj)if(edges.length===1&&edges.some(e=>!used[e]))follow(key);
   for(let i=0;i<segments.length;i++)if(!used[i])follow(segments[i][0]);
   const closed=paths.filter(p=>p.closed).length;
-  return {paths,stats:{components:paths.length,closed,boundary:paths.length-closed,totalLength:paths.reduce((s,p)=>s+p.length,0),segments:segments.length},algorithm:'marching-squares-centre-decider-v1'};
+  return {paths,stats:{components:paths.length,closed,boundary:paths.length-closed,totalLength:paths.reduce((s,p)=>s+p.length,0),segments:segments.length},algorithm:'marching-squares-bilinear-asymptotic-decider-v2'};
 }
 export function buildSpectrum(values,nx,ny,min,max,dx,dy,x0,y0,count=29){
   const data=[];for(let k=0;k<count;k++){const level=min+(max-min)*k/(count-1);const r=extractContours(values,nx,ny,level,dx,dy,x0,y0);data.push({level,closed:r.stats.closed,boundary:r.stats.boundary,components:r.stats.components});}
-  const candidates=[];for(let i=1;i<data.length;i++){const a=data[i-1],b=data[i],delta=Math.abs(a.closed-b.closed)+Math.abs(a.boundary-b.boundary);if(delta>0)candidates.push({level:(a.level+b.level)/2,delta,before:a.components,after:b.components});}
+  const candidates=[];for(let i=1;i<data.length;i++){const a=data[i-1],b=data[i],delta=Math.abs(a.closed-b.closed)+Math.abs(a.boundary-b.boundary);if(delta>0)candidates.push({level:(a.level+b.level)/2,interval:[a.level,b.level],delta,before:a.components,after:b.components});}
   const spacing=(max-min)/11;const events=[];for(const e of candidates.sort((a,b)=>b.delta-a.delta)){if(events.every(x=>Math.abs(x.level-e.level)>spacing)){events.push(e);if(events.length>=8)break;}}
   events.sort((a,b)=>a.level-b.level);
   return {data,events};

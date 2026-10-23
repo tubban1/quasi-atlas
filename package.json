@@ -1,10 +1,11 @@
 {
   "name": "quasi-atlas",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "private": true,
   "scripts": {
     "dev": "vite --host 127.0.0.1",
+    "start": "vite --host 127.0.0.1 --port 5188 --strictPort",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "node --test tests/*.test.js"
