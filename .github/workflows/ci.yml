@@ -20,7 +20,7 @@ jobs:
         with: {node-version: '22', cache: npm}
       - run: npm ci
       - name: Model contracts, golden fixtures, and lessons
-        run: npm test
+        run: npm run gate
       - name: Production build
         run: npm run build
       - name: Prevent accidental secret configuration bundling

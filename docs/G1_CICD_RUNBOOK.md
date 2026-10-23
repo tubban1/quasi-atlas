@@ -4,9 +4,9 @@
 
 ## 一、生产流转关系
 
-Local Mac / OWL LAB → git feature branch → GitHub 私有仓库 tubban1/quasi-atlas → PR → GitHub Actions scientific-gate + browser-gate（目前 GitHub 账户账单限制导致 runner 无法启动）→ main push → Vercel Git 自动检测 → 按 vercel.json 执行 npm ci、npm test、npm run build → 成功后 Vercel 发布到 quasi-atlas-math → Cloudflare 固定 DNS → math.edunest.app。Cloudflare 不参与每次发布。
+Local Mac / OWL LAB → git feature branch → GitHub 私有仓库 tubban1/quasi-atlas → PR → GitHub Actions scientific-gate + browser-gate（目前 GitHub 账户账单限制导致 runner 无法启动）→ main push → Vercel Git 自动检测 → 按 vercel.json 执行 npm ci、npm run gate（强制发现 5 个测试文件及至少 44 项测试）、npm run build → 成功后 Vercel 发布到 quasi-atlas-math → Cloudflare 固定 DNS → math.edunest.app。Cloudflare 不参与每次发布。
 
-当前生效的部署门禁是 Vercel 内置构建中的 44 项 Node 数学/教学测试。GitHub Actions 的浏览器门禁已经定义，但 GitHub 账户返回付款/额度限制，尚无法执行；因此尚不能声称浏览器 Gate 已在 GitHub CI 真正生效。若希望强制 PR checks，须先解除账户限制并启用 main 分支保护。不要把 Vercel 和 Cloudflare 理解成两个网站部署；Cloudflare 此处只管 DNS。
+当前生效的部署门禁是 Vercel 构建中的 fail-closed scientific-gate：必须发现至少 5 个预期测试文件且至少 44 项 Node 数学/教学测试真正通过。此前曾发现 .vercelignore 排除了 tests，导致 0 tests 伪绿；现在保留 tests/scripts 文件并明确检查实际测试数量。GitHub Actions 的浏览器门禁已经定义，但 GitHub 账户返回付款/额度限制，尚无法执行；因此尚不能声称浏览器 Gate 已在 GitHub CI 真正生效。若希望强制 PR checks，须先解除账户限制并启用 main 分支保护。不要把 Vercel 和 Cloudflare 理解成两个网站部署；Cloudflare 此处只管 DNS。
 
 ## 二、开发环境与唯一发布目标
 

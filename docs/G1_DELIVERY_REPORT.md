@@ -16,7 +16,7 @@
 - 本地独立仓库：/Users/wahaha/Documents/Me/Project/cursor/quasi-atlas
 - GitHub Private：tubban1/quasi-atlas，main
 - Vercel Git：已通过 vercel git connect 连接 GitHub 仓库到独立项目 quasi-atlas-math
-- Vercel Build Settings：framework=vite，installCommand=npm ci，buildCommand=npm test && npm run build，outputDirectory=dist
+- Vercel Build Settings：framework=vite，installCommand=npm ci，buildCommand=npm run gate && npm run build，outputDirectory=dist；gate 脚本发现 5 个指定测试文件并要求至少 44 个测试均通过，否则失败。
 - Cloudflare：math.edunest.app CNAME 指向 4415beab2a9c561a.vercel-dns-017.com，DNS only
 - GitHub repository variable CD_MODE=git；GitHub Actions 的 deploy-production 作为备用模式不启动，避免双重发布。
 - 本机 .env、.env.local、.vercel/ 已加入 .gitignore；服务端供应商 Token 不进入浏览器和 Git。
