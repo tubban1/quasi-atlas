@@ -1,6 +1,6 @@
 # Quasi Atlas · 数学秘境 (G2 Discovery Notebook beta)
 
-**v0.5.0-beta.2 · G2 已实现的体验**：从探索工作台点击「▤ 发现日志」，记录问题/预测/观察/反例/结论，保存不可变的 E1 快照，比较两次实验并使用相同数学引擎离线复算。支持 Notebook JSON/CSV 导出及安全导入、旧 G0 实验迁移。完整说明见 [G2 Notebook & Replay](docs/G2_NOTEBOOK_REPLAY.md)，[G2 跨运行环境验收](docs/G2_CROSS_RUNTIME_QUALIFICATION.md)列出固定实验包、Mac/Windows/Linux 使用方法和已通过的 Mac↔Vercel Linux 跨环境测试（3 个固定案例），以及仍未完成的 Windows 实机验收。
+**v0.5.0-beta.2 · G2 已实现的体验**：从探索工作台点击「▤ 发现日志」，记录问题/预测/观察/反例/结论，保存不可变的 E1 快照，比较两次实验并使用相同数学引擎离线复算。支持 Notebook JSON/CSV 导出及安全导入、旧 G0 实验迁移。完整说明见 [G2 Notebook & Replay](docs/G2_NOTEBOOK_REPLAY.md)，[G2 跨运行环境验收](docs/G2_CROSS_RUNTIME_QUALIFICATION.md)列出固定实验包、Mac/Windows/Linux 使用方法和已通过的 Mac↔Vercel Linux 跨环境测试（3 个固定案例），以及通过 Computer MCP 完成的 Windows 真实设备验收。最新工作台采用单主画布和上下文观察/学习/研究面板，见 [工作台信息架构](docs/STUDIO_FOCUS_INFORMATION_ARCHITECTURE.md)。
 
 **0.4.0 全新产品界面**：发现首页（六个生活数学场景）→ 集中式数学探索工作台 → G0–G6 研究路线。保留现有实际计算和 E0/E1 科学分级。见 [UI 2.0 信息架构](docs/UI_2_INFORMATION_ARCHITECTURE.md)。
 

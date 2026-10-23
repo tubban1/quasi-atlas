@@ -1,6 +1,6 @@
 # G2 · Cross-runtime Replay Qualification
 
-Version 0.5.0-beta.2 · 2026-10-24. **This document separates demonstrated engineering compatibility from still-unverified physical Windows acceptance.**
+Version 0.5.0-beta.2 · 2026-10-24. **This document records successful Mac–Windows–Linux engineering replay; independently implemented mathematical verification remains outstanding.**
 
 ## What is new
 
@@ -57,7 +57,7 @@ The script returns MATCH only for two distinct platform/architecture labels with
 
 ## Mac and Vercel Linux
 
-Vercel builds the GitHub commit on Linux, runs the scientific gate (at least 67 tests) and repeats the **identical** fixtures/g2/replay-canary.json. Build logs include one concise G2_CANARY_RECEIPT record containing source/lock and the computed results. Compare this to the Mac receipt using scripts/compare-canary-receipts.mjs. This is two distinct execution environments but does not replace a Windows device acceptance.
+Vercel builds the GitHub commit on Linux, runs the scientific gate (at least 67 tests) and repeats the **identical** fixtures/g2/replay-canary.json. Build logs include one concise G2_CANARY_RECEIPT record containing source/lock and the computed results. Compare this to the Mac receipt using scripts/compare-canary-receipts.mjs. This is one cross-runtime pairing; Windows was separately tested through Computer MCP as documented below.
 
 ## Verified cross-runtime result — 2026-10-24
 
@@ -72,7 +72,7 @@ Vercel builds the GitHub commit on Linux, runs the scientific gate (at least 67 
 - Vercel build: `SCIENTIFIC_GATE_PASS 67/67 across 7 files`, plus the same pinned three-case canary.
 - Production browser: Notebook 1.1 export has matching math and lockfile fingerprints, Worker MATCH, zero JavaScript errors; HTTPS custom domain verified.
 
-**Remaining G2 physical-device gate:** An authorized Windows computer is not currently online in OWL LAB or Remote Desktop Commander, so a Windows receipt has NOT been produced. These two environments establish platform-to-platform numerical reproducibility, **not** external mathematical certification, cryptographically attested computer identity, or a Windows test.
+**Windows physical-device gate: PASS** (2026-10-24). A live Windows 10 x64 machine connected through Computer MCP replayed the identical three-case fixture with Node 24. The actual Windows receipt was compared against both the Mac and Vercel Linux receipts; all three topology counts and all three contour lengths matched exactly (length deltas 0). The initial Windows clone caused a deliberate SHA mismatch because global Git core.autocrlf converted source bytes to CRLF; preserving LF during checkout fixed this. Repository .gitattributes now pins audited text checkout to LF. Full procedure and evidence: [G2_WINDOWS_ACCEPTANCE.md](G2_WINDOWS_ACCEPTANCE.md). The three observed environments establish same-engine platform reproducibility, **not** independent mathematical certification, cryptographically attested computer identity, or a proof.
 
 ## Failure codes
 
@@ -85,7 +85,7 @@ Vercel builds the GitHub commit on Linux, runs the scientific gate (at least 67 
 
 ## Evidence status and remaining limitations
 
-Mac local results and Vercel Linux results are measured separately. They must be compared using the same pinned fixture before reporting G2 cross-runtime engineering qualification. The user's Windows device is **not currently connected to OWL LAB**; no Windows test can be claimed until that device is online and authorized.
+Mac, Windows via Computer MCP, and Vercel Linux results were independently computed and compared using the same pinned fixture on 2026-10-24; all three cases MATCH with length delta 0. Reproduction results are engineering observations only, not numerical certification.
 
 The test receipts do not establish code signing, external numerical oracle equivalence, independent GUDHI/TTK verification, exact GPU/CPU visual identity, formal numerical certification or mathematical proof. Higher evidence tiers remain planned for G3/G4.
 

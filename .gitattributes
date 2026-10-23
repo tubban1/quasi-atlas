@@ -1,0 +1,13 @@
+# Preserve byte-exact, cross-platform numerical code and reproducibility fixtures.
+# Git on Windows may default core.autocrlf=true: enforce LF for audited files.
+*.js text eol=lf
+*.mjs text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf

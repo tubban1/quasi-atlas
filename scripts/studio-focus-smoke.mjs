@@ -1,0 +1,60 @@
+import {chromium} from 'playwright';
+import assert from 'node:assert/strict';
+const url=process.env.QUASI_URL||'http://127.0.0.1:5188/';
+let browser;try{browser=await chromium.launch({channel:'chrome',headless:true});}catch{browser=await chromium.launch({headless:true});}
+const errors=[];const result={desktop:[],mobile:[],errors};
+const check=page=>page.on('pageerror',err=>errors.push(String(err)));
+try{
+ const p=await browser.newPage({viewport:{width:1440,height:900}});check(p);
+ await p.goto(url,{waitUntil:'domcontentloaded'});
+ await p.locator('.nav-link[data-screen="studio"]').click();
+ await p.locator('#openWorldDrawer').waitFor();
+ assert.equal(await p.locator('.world-drawer').isVisible(),false);
+ assert.equal(await p.locator('#focusObserve').isVisible(),true);
+ assert.equal(await p.locator('#focusResearch').isVisible(),false);
+ assert.equal(await p.locator('#focusLearn').isVisible(),false);
+ const layout=await p.evaluate(()=>({grid:getComputedStyle(document.querySelector('.studio-page .layout')).gridTemplateColumns,
+  leftPresent:document.querySelector('.studio-page .layout>.left-panel')!==null}));
+ assert.equal(layout.leftPresent,false);
+ await p.locator('#openWorldDrawer').click();
+ assert.equal(await p.locator('#worldDrawer').isVisible(),true);
+ assert.equal(await p.locator('.life-tile').count(),6);
+ await p.locator('.life-tile[data-life="weather"]').click();
+ assert.equal(await p.locator('#worldDrawer').isVisible(),false);
+ assert.equal(await p.locator('#focusLearn').isVisible(),true);
+ assert.equal(await p.locator('#lifeLab').isVisible(),true);
+ assert.equal(await p.locator('#focusObserve').isVisible(),false);
+ result.desktop.push('drawer with six lessons and auto-focus learning');
+ await p.locator('#openWorldDrawer').click();
+ await p.locator('.preset[data-id="quasi"]').click();
+ assert.equal(await p.locator('#focusObserve').isVisible(),true);
+ assert.equal(await p.locator('#focusLearn').isVisible(),false);
+ result.desktop.push('free exploration returns to observation');
+ await p.locator('.mode[data-mode="research"]').click();
+ assert.equal(await p.locator('#focusResearch').isVisible(),true);
+ assert.equal(await p.locator('#findCritical').isVisible(),true);
+ assert.equal(await p.locator('#exportData').isVisible(),false);
+ await p.locator('#focusResearch .focus-more').nth(1).locator('summary').click();
+ assert.equal(await p.locator('#exportData').isVisible(),true);
+ result.desktop.push('research advanced controls disclosed on demand');
+ await p.locator('#openWorldDrawer').click();
+ await p.keyboard.press('Escape');
+ assert.equal(await p.locator('#worldDrawer').isVisible(),false);
+ result.desktop.push('keyboard Escape drawer accessibility');
+ await p.screenshot({path:'docs/ui-studio-focus-desktop.png',animations:'disabled'});
+ const m=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true});check(m);
+ await m.goto(url,{waitUntil:'domcontentloaded'});
+ await m.locator('.topic-card[data-launch="mountain"]').click();
+ await m.waitForFunction(()=>document.querySelector('#numericStatus')?.textContent==='计算完成',{timeout:15000});
+ assert.equal(await m.locator('#focusLearn').isVisible(),true);
+ const metrics=await m.evaluate(()=>({documentWidth:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth,
+  mathWidth:document.querySelector('.workspace').getBoundingClientRect().width}));
+ assert.ok(metrics.documentWidth<=metrics.viewport+2,JSON.stringify(metrics));
+ await m.locator('#openWorldDrawer').click();
+ assert.equal(await m.locator('#worldDrawer').isVisible(),true);
+ await m.locator('#closeWorldDrawer').click();
+ await m.screenshot({path:'docs/ui-studio-focus-mobile.png',fullPage:true,animations:'disabled'});
+ result.mobile.push('390px no horizontal scroll', 'touch theme drawer accessible');
+ assert.deepEqual(errors,[]);
+ console.log(JSON.stringify({...result,layout,metrics},null,2));
+}finally{await browser.close();}

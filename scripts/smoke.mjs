@@ -12,6 +12,7 @@ await page.waitForFunction(()=>document.querySelector('#numericStatus')?.textCon
 await page.waitForTimeout(700);
 await page.screenshot({path:'docs/desktop-1440.png',fullPage:true});
 const first=await page.locator('#totalLines').textContent();
+await page.locator('#openWorldDrawer').click();
 await page.locator('.preset[data-id="archipelago"]').click();
 await page.waitForFunction(()=>document.querySelector('#worldTitle')?.textContent==='高斯群岛'&&document.querySelector('#numericStatus')?.textContent==='计算完成',{timeout:15000});
 await page.waitForTimeout(600);
@@ -22,6 +23,7 @@ await page.waitForFunction(()=>document.querySelector('#numericStatus')?.textCon
 await page.waitForTimeout(600);
 const comparison=await page.locator('#comparisonReadout').textContent();
 
+await page.locator('.mode[data-mode="research"]').click();
 await page.locator('#findCritical').click();
 await page.waitForFunction(()=>!document.querySelector('#findCritical').disabled,{timeout:20000});
 const criticalText=await page.locator('#criticalList').textContent();
@@ -32,6 +34,7 @@ if(!verificationText.includes('网格') && !verificationText.includes('高度'))
 await page.locator('.mode[data-mode="research"]').click();
 await page.locator('#viewToggle').click();
 const dlPromise=page.waitForEvent('download',{timeout:18000});
+await page.locator('#focusResearch .focus-more').nth(1).locator('summary').click();
 await page.locator('#exportData').click();
 const dl=await dlPromise;
 const exported=JSON.parse(await readFile(await dl.path(),'utf8'));

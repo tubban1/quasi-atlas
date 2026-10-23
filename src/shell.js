@@ -3,7 +3,7 @@ import {LIFE_LESSONS} from './life-content.js';
 const MILESTONES=[
  {id:'G0',state:'done',badge:'基础已实现',title:'可信的数学地基',summary:'定义模型，保留数值边界，让每次计算有来源。',details:['12 组解析几何基准与数学测试','有限域模型、参数单位与 SHA-256 实验哈希','E0 教学 / E1 数值观察的明确区分'],foot:'完成的是工程基础，不代表数学证明。'},
  {id:'G1',state:'progress',badge:'体验版已上线 · 待教学实测',title:'从生活走进数学',summary:'从熟悉场景出发，先猜，再操作，最后理解模型的局限。',details:['6 个完整的生活互动入口','预测、解释、找反例、学习 JSON','仍需真实数据溯源、教师审核和用户理解评估'],foot:'当前全部生活素材采用合成教学模型。'},
- {id:'G2',state:'progress',badge:'G2 Beta · 跨设备验收中',title:'发现日志与复现实验',summary:'保存问题、预测与结果，比较快照，在本机重新计算并导出完整实验包。',details:['Notebook 1.0、不可变快照与 stale 提醒','参数、E1 观测及来源哈希，JSON/CSV/SVG 和文件导入','同一版本的 headless CLI / 工作线程复算与差异分类'],foot:'当前支持经审核的二维标量场；独立设备对照与跨引擎/跨版本迁移仍需独立验收。'},
+ {id:'G2',state:'progress',badge:'G2 Beta · 三平台复算通过',title:'发现日志与复现实验',summary:'保存问题、预测与结果，比较快照，在本机重新计算并导出完整实验包。',details:['Notebook 1.0、不可变快照与 stale 提醒','参数、E1 观测及来源哈希，JSON/CSV/SVG 和文件导入','同一版本的 headless CLI / 工作线程复算与差异分类'],foot:'Mac / Windows / Linux 同引擎固定样例复算通过；独立数学算法对照、跨引擎版本迁移尚未通过科研验收。'},
  {id:'G3',state:'planned',badge:'规划中',title:'深入拓扑结构',summary:'真正研究连通性、洞、分支事件，不只是在屏幕上追线。',details:['H0/H1、持久图及连通结构','临界事件身份追踪、退化与边界处理','用 TTK / GUDHI 做独立算法对照'],foot:'当前候选事件是启发式计算，非持久同调结果。'},
  {id:'G4',state:'planned',badge:'规划中',title:'可认证的数值实验',summary:'限定函数类别，严格区分已认证、无法判断与不满足条件。',details:['区间运算与数值误差包络','驻点存在/唯一/排除的机器可审证书','UNKNOWN / TIMEOUT 不准被误报为通过'],foot:'没有 E3 认证或 E4 数学证明能力。'},
  {id:'G5',state:'planned',badge:'规划中',title:'准周期研究专题',summary:'在具体数学假设下研究长程等值线与参数变化。',details:['准周期场频率矩阵与相位控制','论文复现与窗口扩张实验','参数扫描与版本化研究数据'],foot:'有限窗口边界穿越不证明无限域轨迹。'},
@@ -62,7 +62,7 @@ export function setupAppShell({initialSearch,life,activateResearch,showExperimen
     if(next==='studio'){requestAnimationFrame(()=>{window.dispatchEvent(new Event('resize'));});}
   }
   $$('[data-screen]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.screen)));
-  $$('[data-launch]').forEach(b=>b.addEventListener('click',()=>{navigate('studio');life.show(b.dataset.launch);}));
+  $$('[data-launch]').forEach(b=>b.addEventListener('click',()=>{navigate('studio');life.show(b.dataset.launch);document.querySelector('.mode[data-mode="learn"]')?.click();}));
   $$('[data-launch-mode]').forEach(b=>b.addEventListener('click',()=>{
     const mode=b.dataset.launchMode;
     navigate('studio');

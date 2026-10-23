@@ -1,0 +1,89 @@
+/* Studio focus redesign: one math canvas, one contextual inspector, one optional world library. */
+.studio-page .layout{grid-template-columns:minmax(0,1fr) 335px!important;min-height:570px}
+.studio-page .right-panel{grid-column:2;min-width:0;background:#fffefa}
+.studio-page .workspace{grid-column:1;min-width:0}
+.studio-page .right-panel .rail-scroll{overflow-y:auto;overscroll-behavior:contain;padding:22px 23px}
+.focus-status{margin:0 0 14px!important;padding:0 0 13px!important;border-bottom:1px solid #e1e9df;display:flex;align-items:center;justify-content:space-between}
+.focus-status h2{font-size:15px!important;color:#2c5543!important;margin:0}
+.focus-pane{display:flex;flex-direction:column;gap:12px}
+.focus-pane[hidden]{display:none!important}
+.focus-pane-header{display:flex;flex-direction:column;gap:2px;padding:3px 0 8px}
+.focus-pane-header .section-kicker{font-size:9px;letter-spacing:1.2px}
+.focus-pane-header h3{color:#2d5446;font-size:21px;letter-spacing:-.8px;margin:4px 0 0}
+.studio-page #focusObserve .big-stat{border:0;margin-top:5px;padding:5px 0 13px}
+.studio-page #focusObserve .stats-row{margin:0 0 7px}
+.studio-page #focusObserve .comparison{margin:0 0 9px}
+.studio-page #focusObserve .mode-insight{margin:0 0 6px}
+.studio-page #focusObserve .scientific-note{margin:6px 0}
+.studio-page #focusLearn .life-lab{margin:0;background:#f5f7ee;display:block}
+.studio-page #focusLearn .life-lab[hidden]{display:none!important}
+.focus-learn-intro{border:1px solid #dce8d5;background:linear-gradient(145deg,#f4f8ed,#e7f1e5);border-radius:17px;padding:35px 24px;color:#436c53;display:flex;flex-direction:column;gap:14px;text-align:center;align-items:center}
+.focus-learn-intro[hidden]{display:none!important}
+.focus-learn-intro>span{font-size:42px;color:#87ab92}.focus-learn-intro strong{font-size:18px;line-height:1.5;color:#315b45}
+.focus-learn-intro p{font-size:11px;line-height:1.8;color:#728e77}.focus-learn-intro button{border:0;background:#27664e;color:white;padding:12px 18px;border-radius:10px;font-weight:700;font-size:12px}
+.studio-page #focusResearch .discovery-card{margin:0 0 10px}
+.focus-more{border:1px solid #d7e5d6;background:#f7faf3;border-radius:13px;padding:0 13px;overflow:visible}
+.focus-more>summary{cursor:pointer;list-style:none;color:#315d4c;font-size:12px;font-weight:750;padding:16px 5px;display:flex;justify-content:space-between}
+.focus-more>summary::-webkit-details-marker{display:none}
+.focus-more>summary:after{content:'＋';font-size:15px;color:#7d9a82}
+.focus-more[open]>summary:after{content:'−'}
+.focus-more[open]>summary{border-bottom:1px solid #dfebdc;margin-bottom:15px}
+.focus-more .param{margin:12px 0}.focus-more .button-grid{padding:0 0 17px}
+.studio-page #focusResearch .formula{margin-top:6px}
+.studio-page #focusResearch .footer-note{font-size:10px;line-height:1.6}
+.studio-page #focusResearch .scientific-note{display:block}
+.studio-page .studio-bar .choose-world{margin-left:auto;white-space:nowrap;border-radius:24px;padding:11px 18px;background:#e9f0e7;color:#3f725a;font-size:11px;border:1px solid #cddfcf}
+.studio-page .studio-bar .choose-world:hover{background:#dcebdc}
+.studio-page .studio-bar .mode-switch{flex-shrink:0}
+.studio-page .studio-headline{margin-right:0}
+.world-drawer{position:fixed;inset:0 auto 0 0;width:min(375px,calc(100vw - 23px));max-width:none;max-height:100dvh;height:100dvh;display:none;border:0;border-radius:0 22px 22px 0;margin:0;padding:0;background:#fbfcf6;box-shadow:15px 0 70px rgba(15,56,44,.23);color:#315d4d}
+.world-drawer[open]{display:flex;flex-direction:column}
+.world-drawer::backdrop{background:rgba(10,35,31,.53);backdrop-filter:blur(4px)}
+.world-drawer-head{display:flex;justify-content:space-between;padding:26px 23px 20px;border-bottom:1px solid #e0e9db;gap:15px}
+.world-drawer-head h2{font-size:24px;letter-spacing:-.8px;margin:8px 0 7px}
+.world-drawer-head p{font-size:11px;color:#819582;line-height:1.7;margin:0}
+.world-drawer-close{flex-shrink:0;width:35px;height:35px;border:1px solid #cadcca;border-radius:50%;background:#f2f6ee;color:#517e63;font-size:21px}
+.world-drawer>.left-panel{position:relative!important;width:100%!important;flex:1;min-height:0;display:block!important;border:0!important;box-shadow:none!important;overflow:auto!important}
+.world-drawer>.left-panel .rail-scroll{height:auto!important;max-height:none!important;padding:21px 21px 38px!important;overflow:visible!important}
+.world-drawer>.left-panel h1{font-size:20px!important}
+.world-drawer>.left-panel .intro{font-size:11px}
+.world-drawer>.left-panel .life-lessons{grid-template-columns:1fr 1fr}
+.world-drawer>.left-panel .section-heading{padding:14px 0 9px}
+.world-drawer>.left-panel .rail-foot{margin-bottom:12px}
+body[data-page=studio] .site-foot{display:none}
+@media(max-width:1200px){
+ .studio-page .layout{grid-template-columns:minmax(0,1fr) 315px!important}
+ .studio-page .studio-bar{gap:10px}.studio-page .studio-headline strong{display:none}
+}
+@media(max-width:1020px){
+ .studio-page .layout{display:flex!important;flex-direction:column!important;height:auto!important;min-height:0!important}
+ .studio-page .workspace{width:100%;height:560px;min-height:560px;order:0}
+ .studio-page .right-panel{width:100%;order:1;min-height:0}
+ .studio-page .right-panel .rail-scroll{overflow:visible!important;max-height:none;padding:20px 22px}
+ .studio-page .studio-bar .choose-world{margin-left:auto}
+ .studio-page .studio-bar .mode-switch{display:flex}
+ .studio-page .studio-bar .studio-tools{display:flex!important}
+ .world-drawer>.left-panel .rail-scroll{overflow:visible!important}
+}
+@media(max-width:700px){
+ .studio-page .studio-bar{height:53px;gap:5px;padding:0 0 7px}
+ .studio-page .studio-bar .choose-world{font-size:10px;padding:9px 9px;margin-left:0}
+ .studio-page .studio-bar .mode-switch{padding:2px;gap:0}
+ .studio-page .studio-bar .mode{font-size:10px;padding:8px 10px}
+ .studio-page .studio-tools{margin-left:auto!important}
+ .studio-page .studio-tool.notebook-open{font-size:0!important;padding:8px 9px!important;white-space:nowrap}
+ .studio-page .studio-tool.notebook-open:before{content:'▤ 笔记';font-size:10px}
+ .studio-page .studio-tool.notebook-open span{font-size:9px!important}
+ .studio-page .workspace{height:510px;min-height:510px}
+ .studio-page .right-panel .rail-scroll{padding:20px 17px}
+ .focus-pane-header h3{font-size:22px}
+ .world-drawer{width:min(355px,96vw)}
+ .world-drawer-head{padding:21px 19px 16px}
+ .world-drawer>.left-panel .rail-scroll{padding:18px 17px 35px!important}
+}
+/* Override the former full-width 3-column mode switch on narrow screens. */
+.studio-page .studio-bar .mode-switch{width:auto!important;min-width:0!important;max-width:none!important;flex:0 0 auto!important}
+.studio-page .studio-bar .mode{min-width:0!important;width:auto!important;flex:0 0 auto!important}
+@media(max-width:700px){.studio-page .studio-bar .mode-switch{flex:0 1 auto!important}.studio-page .studio-bar .mode{padding:8px 9px!important}.studio-page .studio-bar .choose-world{flex:0 0 auto!important}}
+/* Earlier Notebook media rule hides every .studio-tool except the Notebook; restore the world picker. */
+.studio-page .studio-bar .choose-world{display:inline-flex!important;align-items:center;justify-content:center}

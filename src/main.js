@@ -1,6 +1,8 @@
 import './style.css';
 import './ui-v2.css';
 import './notebook.css';
+import './studio-focus.css';
+import {setupStudioFocus} from './studio-focus.js';
 import {setupAppShell} from './shell.js';
 import {PRESETS,getPreset,evaluateField} from './math/fields.js';
 import {createModel,createExperiment} from './math/contract.js';
@@ -302,3 +304,5 @@ window.__notebook=setupNotebook({
  },
  download:downloadBlob,showMessage:toast
 });
+
+window.__studioFocus=setupStudioFocus();

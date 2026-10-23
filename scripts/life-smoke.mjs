@@ -10,8 +10,9 @@ try {
  page.on('console',m=>{if(m.type()==='error')errs.push(m.text());});
  await page.goto(url,{waitUntil:'domcontentloaded'});
  await page.locator('.topic-card[data-launch="mountain"]').click();
- await page.waitForSelector('.life-tile');
+ await page.waitForSelector('.life-tile',{state:'attached'});
  for(const id of ['mountain','puddles','weather','beats','moire','wifi']){
+   await page.locator('#openWorldDrawer').click();
    await page.locator('.life-tile[data-life="'+id+'"]').click();
    assert.equal(await page.locator('.life-tile[data-life="'+id+'"]').getAttribute('aria-pressed'),'true');
    assert.equal(await page.locator('#lifeLab').isVisible(),true);
