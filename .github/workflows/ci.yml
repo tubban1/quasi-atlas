@@ -1,34 +1,80 @@
-name: Quasi Atlas G0 CI
+name: Quasi Atlas Scientific CI and Vercel CD
 on:
   pull_request:
   push:
     branches: [main]
+  workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: quasi-atlas-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   scientific-gate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          persist-credentials: false
-      - name: Set up Node
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          node-version: '22'
-          cache: npm
-      - name: Install locked dependencies
-        run: npm ci --ignore-scripts
-      - name: Test analytic fixtures and evidence contract
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with: {node-version: '22', cache: npm}
+      - run: npm ci
+      - name: Model contracts, golden fixtures, and lessons
         run: npm test
-      - name: Build static site
+      - name: Production build
         run: npm run build
-      - name: Ensure no credentials in built bundle
-        shell: bash
+      - name: Prevent accidental secret configuration bundling
         run: |
           if grep -R -l -E '(AWS_SECRET_ACCESS_KEY|NEON_API_KEY|VERCEL_API_TOKEN|CLOUDFLARE_API_TOKEN)' dist; then
-            echo "Sensitive variable key detected in build output" >&2
+            echo 'Forbidden service secret name in client output' >&2
             exit 1
           fi
+  browser-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with: {node-version: '22', cache: npm}
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Full G0 + G1 browser exploration
+        run: |
+          npm run start > /tmp/quasi-ci-vite.log 2>&1 &
+          server=$!
+          trap 'kill $server 2>/dev/null || true' EXIT
+          for i in $(seq 1 35); do curl -fsS http://127.0.0.1:5188/ >/dev/null && break || sleep 1; done
+          npm run test:browser
+          node scripts/smoke.mjs
+  deploy-production:
+    needs: [scientific-gate, browser-gate]
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.CD_MODE == 'actions'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with: {node-version: '22', cache: npm}
+      - name: Ensure deployment credential scope is available
+        run: test -n "$VERCEL_TOKEN" && test -n "$VERCEL_ORG_ID" && test -n "$VERCEL_PROJECT_ID"
+      - run: npm ci
+      - run: npm install -g vercel@59.15.1
+      - name: Link exactly the intended independent Vercel project
+        run: |
+          vercel pull --yes --environment=production --scope tubbans-projects-c58b36e6
+          node --input-type=module -e "import fs from 'node:fs'; const p=JSON.parse(fs.readFileSync('.vercel/project.json')); if(p.projectName!=='quasi-atlas-math'||p.projectId!==process.env.VERCEL_PROJECT_ID||p.orgId!==process.env.VERCEL_ORG_ID) throw Error('Wrong deployment target');"
+      - name: Build the checked commit in Vercel production
+        run: vercel build --prod --scope tubbans-projects-c58b36e6
+      - name: Production publish
+        run: vercel deploy --prebuilt --prod --scope tubbans-projects-c58b36e6
+      - name: Verify custom domain without changing Cloudflare DNS
+        run: |
+          curl --fail --silent --show-error --retry 5 --retry-delay 3 -L https://math.edunest.app/ -o /tmp/math-response.html
+          grep -q 'Quasi Atlas' /tmp/math-response.html

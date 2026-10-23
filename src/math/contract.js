@@ -24,7 +24,7 @@ export function createModel({presetId,phase=0,level=0,bounds={xmin:-22,xmax:22,y
  if(!Array.isArray(resolution)||resolution.length!==2)bad('INVALID_RESOLUTION','resolution must be [nx,ny]');
  const nx=number(resolution[0],'nx',16,2048),ny=number(resolution[1],'ny',16,2048);
  if(!Number.isInteger(nx)||!Number.isInteger(ny)||nx*ny>2_097_152)bad('RESOURCE_LIMIT','sampling budget exceeded');
- return {schema:MODEL_SCHEMA,id:presetId,source:{kind:'preset',id:presetId,definition:p.formula,implementation:'fields.js/0.2'},parameters:{phase:number(phase,'phase',-Math.PI,Math.PI),level:number(level,'level',p.min,p.max)},domain:{...domain,coordinateFrame:'cartesian',boundary:'clipped-rectangle',units:{x:'dimensionless',y:'dimensionless',f:'dimensionless'}},sampling:{nx,ny,floatFormat:'float32',interpolation:'bilinear'}};
+ return {schema:MODEL_SCHEMA,id:presetId,source:{kind:'preset',id:presetId,definition:p.formula,implementation:'fields.js/0.2'},parameters:{phase:number(phase,'phase',-Math.PI,Math.PI),level:number(level,'level',p.min,p.max)},domain:{...domain,coordinateFrame:'cartesian',boundary:'clipped-rectangle',units:{x:'dimensionless',y:'dimensionless',f:p.id==='temperature'?'celsius-synthetic':p.id==='wifi'?'normalized-synthetic':'dimensionless'}},sampling:{nx,ny,floatFormat:'float32',interpolation:'bilinear'}};
 }
 export function evidence(level,claim,options={}){
  if(!EVIDENCE_LEVELS.includes(level))bad('INVALID_EVIDENCE','unknown evidence level');
