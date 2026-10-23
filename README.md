@@ -1,5 +1,7 @@
 # Quasi Atlas · 数学秘境 (G1 Everyday Math beta)
 
+**G1 工程交付与阻塞情况：** [docs/G1_DELIVERY_REPORT.md](docs/G1_DELIVERY_REPORT.md)。
+
 **G1 六个可互动生活数学主题已加入：** 山路、积水、温度、拍频（1D）、摩尔纹、Wi‑Fi。学习流程为预测、动手、解释、反例、研究/JSON。所有现实类比均标记为合成模型；详见 [docs/G1_CICD_RUNBOOK.md](docs/G1_CICD_RUNBOOK.md)。
 
 **本地质量门禁：** npm test · npm run build · npm run test:browser。Vercel Git 自动部署使用 vercel.json：测试通过后发布。GitHub Actions 已配置但账户付费/支出上限目前阻止 runner 执行，详情见运行手册。正式站：https://math.edunest.app/。
