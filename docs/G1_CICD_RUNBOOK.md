@@ -4,9 +4,9 @@
 
 ## 一、生产流转关系
 
-Local Mac / OWL LAB → git feature branch → GitHub private repo tubban1/quasi-atlas → PR → GitHub Actions scientific-gate + browser-gate → 人工合入 main → main push 再跑两道门禁 → deploy-production job → 独立 Vercel 项目 quasi-atlas-math → math.edunest.app。Cloudflare 负责长期稳定的 DNS，不参与每次 CI 发布。
+Local Mac / OWL LAB → git feature branch → GitHub 私有仓库 tubban1/quasi-atlas → PR → GitHub Actions scientific-gate + browser-gate（目前 GitHub 账户账单限制导致 runner 无法启动）→ main push → Vercel Git 自动检测 → 按 vercel.json 执行 npm ci、npm test、npm run build → 成功后 Vercel 发布到 quasi-atlas-math → Cloudflare 固定 DNS → math.edunest.app。Cloudflare 不参与每次发布。
 
-质量门禁没有通过时不部署新版本。不要把 Vercel 和 Cloudflare 配置理解成两个独立的网站部署；Cloudflare 此处只管理 DNS。
+当前生效的部署门禁是 Vercel 内置构建中的 44 项 Node 数学/教学测试。GitHub Actions 的浏览器门禁已经定义，但 GitHub 账户返回付款/额度限制，尚无法执行；因此尚不能声称浏览器 Gate 已在 GitHub CI 真正生效。若希望强制 PR checks，须先解除账户限制并启用 main 分支保护。不要把 Vercel 和 Cloudflare 理解成两个网站部署；Cloudflare 此处只管 DNS。
 
 ## 二、开发环境与唯一发布目标
 
@@ -49,17 +49,17 @@ Local Mac / OWL LAB → git feature branch → GitHub private repo tubban1/quasi
     git push -u origin feat/your-feature
     gh pr create --fill
 
-合并前需要 scientific-gate 和 browser-gate 通过。合并 main 后由 GitHub Actions 自动启动 deploy-production，不需每次手动调用 Vercel CLI。
+计划要求合并前 scientific-gate 与 browser-gate 通过；但当前 GitHub Actions 因账户账单/支出上限阻塞，实际尚无法启用强制 PR 门禁。当前有效自动发布路线是 Vercel Git 集成：合并 main 后自动运行 vercel.json 内的测试/构建；两者成功才替换生产部署。
 
 ## 四、GitHub CI/CD 内容
 
 - .github/workflows/ci.yml 是真实工作流，不是示意。
 - scientific-gate：Node22、锁文件安装、全部数学/学习内容测试、Vite build、检查敏感服务配置键未进入前端静态包。
 - browser-gate：安装 Playwright Chromium；启动本地站，逐一操作 6 张生活数学卡、导出记录，并回归 G0 探索/科研流程。
-- deploy-production：只允许 main push 且前两个 job 成功，读取已加密的 GitHub Secrets，核对 Vercel team/project 身份，使用被测 commit 构建并自动发到生产。
+- deploy-production：这是可选的 Actions CD 备用通道，只有将 GitHub 仓库变量 CD_MODE 切为 actions 并配置 Secrets 后才运行；当前 CD_MODE=git，因此该 Job 跳过，避免同一次提交触发两套生产部署。
 - post-deploy：检查 math.edunest.app 页面是否返回 Quasi Atlas。
 
-GitHub Secrets 名称：VERCEL_TOKEN、VERCEL_ORG_ID、VERCEL_PROJECT_ID。它们只存 GitHub 加密 secret；CI 不需要 Cloudflare Token、Neon API Key、AWS keys 或 NPM token。推荐为 GitHub production environment 设置合适的分支限制；分支保护规则需要以 GitHub 账户真实权限为准。
+当前 CD_MODE=git，使用 Vercel 官方 Git 集成，GitHub 不需要存 Vercel Token，且未复制本地 .env 到 GitHub。只有切换至 Actions CD 时，才由用户在 GitHub Secrets 中配置 VERCEL_TOKEN、VERCEL_ORG_ID、VERCEL_PROJECT_ID，并核对 Production environment 权限。CI 不需要 Cloudflare/Neon/AWS/NPM Token。
 
 ## 五、Vercel 与 Cloudflare 为什么这样连接
 
