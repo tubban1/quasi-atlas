@@ -59,6 +59,21 @@ The script returns MATCH only for two distinct platform/architecture labels with
 
 Vercel builds the GitHub commit on Linux, runs the scientific gate (at least 67 tests) and repeats the **identical** fixtures/g2/replay-canary.json. Build logs include one concise G2_CANARY_RECEIPT record containing source/lock and the computed results. Compare this to the Mac receipt using scripts/compare-canary-receipts.mjs. This is two distinct execution environments but does not replace a Windows device acceptance.
 
+## Verified cross-runtime result — 2026-10-24
+
+**PASS: Mac darwin-arm64 (Node 22) vs Vercel Linux-x64 (Node 22).**
+
+- Release deployment Git commit: `8ece83b` (Vercel Production READY).
+- Mathematical code represented by the canary fixture was already committed at `c32057b`. Different later Git revisions are not treated as equal by name; the comparison explicitly verifies the identical math-source and lockfile content.
+- Source: `sha256:3393c7753462b46ba042704f88e0a67d8c45eabd53b34f1070dcf60f42f42bc0`.
+- Dependency lock: `sha256:66fd2f12727bb16df9cc30aa22c28618313e44826fdba397c49637c8c751b1a4`.
+- Exact pinned canary notebook: `sha256:e17ca4fd35323c8b0ea42b25db261f1f8023a068d0bf3da6d81aae4dfd584c49`.
+- Both real environments independently computed **MATCH** for 3 audited 2D finite-grid experiments; integer contour counts match and actual length differences are `[0, 0, 0]` within the published tolerances.
+- Vercel build: `SCIENTIFIC_GATE_PASS 67/67 across 7 files`, plus the same pinned three-case canary.
+- Production browser: Notebook 1.1 export has matching math and lockfile fingerprints, Worker MATCH, zero JavaScript errors; HTTPS custom domain verified.
+
+**Remaining G2 physical-device gate:** An authorized Windows computer is not currently online in OWL LAB or Remote Desktop Commander, so a Windows receipt has NOT been produced. These two environments establish platform-to-platform numerical reproducibility, **not** external mathematical certification, cryptographically attested computer identity, or a Windows test.
+
 ## Failure codes
 
 - Invalid/tampered/unrecognized Notebook: exit 2; no execution of imported expression/source.

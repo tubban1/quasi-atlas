@@ -54,7 +54,7 @@ Implemented tests:
 - Previous G0/G1 math contract and browser regression remain required.
 
 Not yet claimed:
-- Two physically separate computers/OSes replayed the identical file, or an independent numerical algorithm validated these results.
+- Two distinct execution environments (Mac ARM64 and Vercel Linux x64) have reproduced the same pinned canary with no length differences; an actual **Windows** device and independently implemented numerical algorithm have not yet been verified. See the separate cross-runtime qualification record.
 - Full cross-version engine migrations and pinned source/dependency-lock provenance.
 - External research-grade or educational-scientific review.
 
