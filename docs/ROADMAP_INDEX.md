@@ -2,7 +2,7 @@
 
 **制定日期：2026-10-23 | 原基线 0.2；截至 2026-10-24，G0 已实施、G1 首批六张合成教学卡已实施，教育实证及真实开放数据仍待验收。**
 
-生产研发流程见 [G1_CICD_RUNBOOK.md](G1_CICD_RUNBOOK.md)，实际 G1 验收与 GitHub Actions 账单阻塞见 [G1_DELIVERY_REPORT.md](G1_DELIVERY_REPORT.md)。
+全新 UI 信息架构见 [UI_2_INFORMATION_ARCHITECTURE.md](UI_2_INFORMATION_ARCHITECTURE.md)，生产研发流程见 [G1_CICD_RUNBOOK.md](G1_CICD_RUNBOOK.md)，实际 G1 验收与 GitHub Actions 账单阻塞见 [G1_DELIVERY_REPORT.md](G1_DELIVERY_REPORT.md)。
 
 > 一句话：从看见生活中的数学，到亲自提出可证伪猜想，再到可信赖、可复现的科学实验。产品允许人人进入；研究级结论必须遵守严格限定。
 

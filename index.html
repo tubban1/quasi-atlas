@@ -1,13 +1,82 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><meta name="theme-color" content="#0b1820"/><title>Quasi Atlas · 数学秘境</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2715%27 fill=%27%23102d36%27/%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2719%27 fill=%27none%27 stroke=%27%23d8d3a8%27 stroke-width=%273%27/%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%276%27 fill=%27%23eed5a2%27/%3E%3C/svg%3E"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet"/></head>
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><meta name="theme-color" content="#f5f6f0"/><title>Quasi Atlas · 数学秘境</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2715%27 fill=%27%23102d36%27/%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2719%27 fill=%27none%27 stroke=%27%23d8d3a8%27 stroke-width=%273%27/%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%276%27 fill=%27%23eed5a2%27/%3E%3C/svg%3E"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet"/></head>
 <body>
 <div id="app">
-<header class="topbar">
-  <div class="identity"><div class="brand-glyph" aria-hidden="true"><span></span><span></span><span></span></div><div><div class="brand-name">quasi<span>atlas</span><b class="beta">G1</b></div><div class="brand-sub">数学秘境 · EXPLORE THE UNSEEN</div></div></div>
-  <div class="mode-switch" role="tablist" aria-label="探索模式"><button class="mode active" data-mode="wander" role="tab" aria-selected="true">✦ &nbsp;漫游</button><button class="mode" data-mode="learn" role="tab" aria-selected="false">◈ &nbsp;理解</button><button class="mode" data-mode="research" role="tab" aria-selected="false">⌁ &nbsp;研究</button></div>
-  <div class="top-actions"><span class="status-pill"><i></i> 本地计算 · 无需登录</span><button class="iconbtn" id="copyLink" title="复制可复现实验链接" aria-label="分享实验">↗</button><button class="iconbtn" id="themeToggle" title="切换色彩世界" aria-label="切换色彩">◐</button></div>
+<header class="app-header" role="banner">
+  <button class="brand-home" type="button" data-screen="home" aria-label="Quasi Atlas 返回首页">
+   <span class="brand-symbol" aria-hidden="true"><span class="orbit orbit-one"></span><span class="orbit orbit-two"></span><span class="orbit-core"></span></span>
+   <span class="brand-words"><strong>quasi<span>atlas</span></strong><small>让好奇，成为一种发现</small></span>
+  </button>
+  <nav class="global-nav" aria-label="主要导航">
+   <button type="button" class="nav-link active" data-screen="home" aria-current="page">发现</button>
+   <button type="button" class="nav-link" data-screen="studio">探索工作台</button>
+   <button type="button" class="nav-link" data-screen="roadmap">研究路线</button>
+  </nav>
+  <div class="global-actions">
+   <span class="local-pill"><span class="status-orb"></span>本地计算 · 无需登录</span>
+   <button type="button" class="header-action" data-launch="mountain">开始探索 <span aria-hidden="true">↗</span></button>
+  </div>
 </header>
+<section id="homeScreen" class="page home-page" aria-label="Quasi Atlas 发现数学">
+ <div class="home-container">
+  <section class="hero-panel">
+   <div class="hero-copy">
+    <span class="hero-kicker"><span class="kicker-line"></span> A NEW WAY TO SEE MATHEMATICS</span>
+    <h1>原来数学，<br>藏在<em>每一天</em>里。</h1>
+    <p>从一张天气图、一条山路、两段声音开始。<br>像探索一座新世界一样，发现数学真正有趣的部分。</p>
+    <div class="hero-actions"><button type="button" class="hero-primary" data-launch="mountain">开始第一段探索 <span>↗</span></button><button type="button" class="hero-secondary" data-screen="roadmap">了解我们的研究计划 <span>→</span></button></div>
+    <div class="hero-foot"><span><b>06</b> 个可互动主题</span><i></i><span><b>0</b> 门槛开始</span><i></i><span><b>E0 / E1</b> 明确证据</span></div>
+   </div>
+   <div class="hero-art" aria-hidden="true">
+    <div class="hero-art-top"><span>FIG 01 — CONTOUR &amp; CHANGE</span><span>QUASI / ATLAS</span></div>
+    <svg viewBox="0 0 640 520" preserveAspectRatio="xMidYMid meet" class="hero-contour" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+       <linearGradient id="islandGrad" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e2ee8c"/><stop offset=".5" stop-color="#7dcdb1"/><stop offset="1" stop-color="#3a8b94"/></linearGradient>
+       <radialGradient id="artGlow"><stop stop-color="#efffda" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+       <filter id="softGlow"><feGaussianBlur stdDeviation="12"/></filter>
+      </defs>
+      <ellipse cx="310" cy="258" rx="255" ry="218" fill="url(#artGlow)"/>
+      <g transform="translate(22 0) rotate(-15 305 265)" fill="none" stroke-linecap="round">
+       <path d="M80 262C60 165 131 93 243 81C333 71 365 126 439 144C518 165 562 226 540 299C511 389 404 449 300 431C196 418 90 368 80 262Z" stroke="#86bda7" stroke-opacity=".4" stroke-width="1.4"/>
+       <path d="M99 259C88 181 151 119 243 108C329 95 363 154 430 170C490 185 521 231 514 297C495 370 405 417 300 407C213 400 108 349 99 259Z" stroke="#91c8a7" stroke-width="1.6"/>
+       <path d="M126 260C121 198 169 149 246 139C317 128 358 171 421 196C465 213 494 239 486 289C471 346 391 386 309 380C219 376 131 337 126 260Z" stroke="#a7d3a1" stroke-width="1.8"/>
+       <path d="M154 258C161 206 187 178 254 169C315 161 351 203 406 219C452 231 458 266 449 296C431 339 380 360 311 354C238 347 148 326 154 258Z" stroke="#cce1a2" stroke-width="2.1"/>
+       <path d="M183 260C180 224 215 194 257 195C309 195 349 224 382 239C414 253 421 275 412 296C400 323 363 327 313 322C244 315 189 303 183 260Z" stroke="#f1e9b3" stroke-width="2.3"/>
+       <path d="M221 256C231 231 248 225 276 228C320 232 330 246 355 259C377 271 388 290 368 301C341 313 307 292 277 289C242 285 210 280 221 256Z" fill="url(#islandGrad)" fill-opacity=".78" stroke="#fef8cd" stroke-width="2.3"/>
+       <path d="M256 257C275 238 305 254 324 262C351 274 352 286 331 287C313 286 289 271 271 270C252 271 248 266 256 257Z" stroke="#fffce1" stroke-width="2.4"/>
+      </g>
+      <g fill="#efffea"><circle cx="104" cy="131" r="4"/><circle cx="539" cy="376" r="5"/><circle cx="480" cy="130" r="2.5"/></g>
+      <path d="M84 442H190" stroke="#dcf2bd" stroke-opacity=".65"/><text x="84" y="461" font-size="12" fill="#e6f4d7" letter-spacing="2">THE BEAUTY OF CHANGE</text>
+    </svg>
+    <div class="art-float art-float-a"><span class="small-dot"></span> LEVEL c = 0.82</div>
+    <div class="art-float art-float-b">不同高度，相同世界。<span>↗</span></div>
+   </div>
+  </section>
+  <section class="journey-strip" aria-label="使用方法">
+   <div class="journey-intro"><span class="section-kicker">HOW IT WORKS</span><strong>不用懂公式，<br>也可以先开始。</strong></div>
+   <div class="journey-step"><span>01</span><strong>选一个生活问题</strong><small>从你已经熟悉的事情开始</small></div>
+   <div class="journey-arrow">→</div>
+   <div class="journey-step"><span>02</span><strong>动手，看看会发生什么</strong><small>预测、调节、寻找意外</small></div>
+   <div class="journey-arrow">→</div>
+   <div class="journey-step"><span>03</span><strong>带着发现继续探索</strong><small>了解局限，保存你的观察</small></div>
+  </section>
+  <section class="home-topics" id="homeTopicsSection">
+   <div class="section-topline"><div><span class="section-kicker">THE EVERYDAY COLLECTION</span><h2>从好奇的地方开始。</h2><p>六个生活切面，每一个都有一段值得发现的数学。</p></div><span class="topic-count">01 — 06 &nbsp; / &nbsp; 教学模拟</span></div>
+   <div class="topic-grid" id="homeTopicGrid"></div>
+  </section>
+  <section class="pathway-panel">
+   <div class="pathway-intro"><span class="section-kicker">ONE WORLD · THREE DEPTHS</span><h2>你的好奇，<br>可以走得更远。</h2><p>同一个数学世界，可以只看它有多美，也可以追问它为什么如此。</p></div>
+   <button type="button" class="pathway-card" data-launch="mountain"><span class="pathway-ordinal">A / LOOK</span><span class="pathway-icon">✳</span><strong>生活探索</strong><small>看见熟悉现象背后的数学规律</small><span class="pathway-link">从这里开始 ↗</span></button>
+   <button type="button" class="pathway-card" data-launch-mode="learn"><span class="pathway-ordinal">B / LEARN</span><span class="pathway-icon">◌</span><strong>动手理解</strong><small>先预测，再观察，也学会找反例</small><span class="pathway-link">进入工作台 ↗</span></button>
+   <button type="button" class="pathway-card" data-launch-mode="research"><span class="pathway-ordinal">C / QUESTION</span><span class="pathway-icon">⌁</span><strong>严谨研究</strong><small>查看模型、网格精度与计算证据</small><span class="pathway-link">进入研究模式 ↗</span></button>
+  </section>
+  <section class="home-bottom"><div><span class="section-kicker">THE SCIENCE BEHIND THE MAGIC</span><h2>美丽是开始。证据让发现走得更远。</h2><p>我们区分教学示意、有限区域数值观察与数学证明。没有研究认证的功能，不会被包装成“已经证明”。</p></div><button type="button" class="outline-link" data-screen="roadmap">看看接下来要做什么 ↗</button></section>
+  <footer class="site-foot"><span>© Quasi Atlas · eduNest</span><span>Designed for curiosity. Grounded in evidence.</span><span>Local-first · G1 Beta</span></footer>
+ </div>
+</section>
+<section class="page studio-page" id="studioScreen" aria-label="Quasi Atlas 互动探索工作台" hidden>
+ <div class="studio-bar"><div class="studio-breadcrumb"><button type="button" data-screen="home">← 发现</button><span>/</span><span>探索工作台</span></div><div class="studio-headline"><span class="section-kicker">INTERACTIVE MATHEMATICS</span><strong>在这里，每一个变化都看得见。</strong></div><div class="mode-switch" role="tablist" aria-label="探索深度"><button class="mode active" data-mode="wander" role="tab" aria-selected="true">漫游</button><button class="mode" data-mode="learn" role="tab" aria-selected="false">理解</button><button class="mode" data-mode="research" role="tab" aria-selected="false">研究</button></div><div class="studio-tools"><button class="studio-tool" id="copyLink" type="button" title="复制可复现实验链接" aria-label="分享实验链接">↗ 分享</button><button class="studio-tool" id="themeToggle" type="button" title="切换数学图层配色" aria-label="切换画布配色">◐ 配色</button></div></div>
 <div class="layout">
 <aside class="rail left-panel">
   <div class="rail-scroll">
@@ -71,7 +140,20 @@
  <details class="formula"><summary>∑ &nbsp;查看数学定义与限制 <span>⌄</span></summary><div id="formulaText"></div></details>
  <div class="footer-note">Quasi Atlas G0 · Evidence E1 · 数值现象 ≠ 数学证明。<br/>研究用途请记录网格尺度和边界条件。</div>
 </div></aside>
-</div><div id="toast" role="status" aria-live="polite"></div>
+</div>
+ <div class="studio-footnote">E0 教学模拟 · E1 有限窗口的数值观察 &nbsp; / &nbsp; 研究不等于证明 <span>由公式计算，默认不上传数据</span></div>
+</section>
+<section class="page roadmap-page" id="roadmapScreen" aria-label="Quasi Atlas 研究发展路线" hidden>
+ <div class="roadmap-container">
+  <div class="roadmap-cover"><span class="section-kicker">THE ROAD AHEAD / RESEARCH ROADMAP</span><h1>让每一次好奇，<br><em>都更有根据。</em></h1><p>我们希望让日常的观察走向可靠的研究。这里公开已经实现、正在验证，以及尚未开始的工作。</p><button type="button" class="hero-primary" data-launch-mode="research">体验现有研究工具 ↗</button><div class="roadmap-loop" aria-hidden="true">∑<small>WHY?</small></div></div>
+  <div class="roadmap-principles"><div><strong>从生活开始</strong><span>普通人、学生、研究者共享同一个数学世界。</span></div><div><strong>证据有等级</strong><span>数值观察不等于严格认证；认证不等于数学证明。</span></div><div><strong>结果能被质疑</strong><span>保留反例、失败、不确定性和复现实验信息。</span></div></div>
+  <div class="section-topline roadmap-section-header"><div><span class="section-kicker">G0—G6 · THE PATH</span><h2>我们正在建设什么？</h2><p>前两阶段已具备工程功能，后续阶段仍是科研与产品计划。</p></div></div>
+  <div class="roadmap-timeline" id="roadmapTimeline"></div>
+  <div class="roadmap-evidence"><div class="section-kicker">EVIDENCE IS THE FOUNDATION</div><h2>一条很漂亮的曲线，<br>还不是一个数学定理。</h2><div class="evidence-grid" id="evidenceGrid"></div><p>当前产品使用 E0 教学模拟与 E1 有限域数值观察。更高等级是需要专门数学认证流程才能获得的目标，不会自动升级。</p></div>
+  <footer class="site-foot"><span>Quasi Atlas · Research roadmap</span><button type="button" data-screen="home">回到首页 ↑</button></footer>
+ </div>
+</section>
+<div id="toast" role="status" aria-live="polite"></div>
 </div>
 <script type="module" src="/src/main.js"></script>
 </body></html>

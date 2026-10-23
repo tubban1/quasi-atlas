@@ -9,6 +9,7 @@ try {
  page.on('pageerror',e=>errs.push(String(e)));
  page.on('console',m=>{if(m.type()==='error')errs.push(m.text());});
  await page.goto(url,{waitUntil:'domcontentloaded'});
+ await page.locator('.topic-card[data-launch="mountain"]').click();
  await page.waitForSelector('.life-tile');
  for(const id of ['mountain','puddles','weather','beats','moire','wifi']){
    await page.locator('.life-tile[data-life="'+id+'"]').click();
@@ -48,7 +49,7 @@ try {
  const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
  mobile.on('pageerror',e=>errs.push('mobile:'+String(e)));
  await mobile.goto(url,{waitUntil:'domcontentloaded'});
- await mobile.locator('.life-tile[data-life="weather"]').click();
+ await mobile.locator('.topic-card[data-launch="weather"]').click();
  assert.equal(await mobile.locator('#lifeLab').isVisible(),true);
  await mobile.screenshot({path:'/tmp/quasi-g1-mobile.png',fullPage:true});
  log.mobile='pass';

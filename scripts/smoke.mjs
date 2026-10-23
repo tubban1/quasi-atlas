@@ -7,6 +7,7 @@ const page=await browser.newPage({viewport:{width:1440,height:900},deviceScaleFa
 page.on('pageerror',e=>errors.push(String(e)));
 page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
 await page.goto(process.env.QUASI_URL||'http://127.0.0.1:5188/',{waitUntil:'domcontentloaded'});
+await page.locator('.nav-link[data-screen="studio"]').click();
 await page.waitForFunction(()=>document.querySelector('#numericStatus')?.textContent==='计算完成',{timeout:15000});
 await page.waitForTimeout(700);
 await page.screenshot({path:'docs/desktop-1440.png',fullPage:true});
@@ -41,6 +42,7 @@ await page.screenshot({path:'docs/research-1440.png',fullPage:true});
 const mobile=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});
 mobile.on('pageerror',e=>errors.push('mobile:'+String(e)));
 await mobile.goto(process.env.QUASI_URL||'http://127.0.0.1:5188/',{waitUntil:'domcontentloaded'});
+await mobile.locator('.nav-link[data-screen="studio"]').click();
 await mobile.waitForFunction(()=>document.querySelector('#numericStatus')?.textContent==='计算完成',{timeout:15000});
 await mobile.waitForTimeout(700);
 await mobile.screenshot({path:'docs/mobile-390.png',fullPage:true});

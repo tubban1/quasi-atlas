@@ -1,4 +1,6 @@
 import './style.css';
+import './ui-v2.css';
+import {setupAppShell} from './shell.js';
 import {PRESETS,getPreset,evaluateField} from './math/fields.js';
 import {createModel,createExperiment} from './math/contract.js';
 import {setupLifeLens} from './life-ui.js';
@@ -7,6 +9,7 @@ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const canvas=$('#worldCanvas'),ctx=canvas.getContext('2d',{alpha:false}),wrap=$('#canvasWrap');
 const worker=new Worker(new URL('./worker.js',import.meta.url),{type:'module'});
 const restored=new URLSearchParams(location.search);
+const initialSearch=new URLSearchParams(location.search);
 const state={
  id:restored.get('world')||'quasi',level:Number(restored.get('level')||0),
  phase:Number(restored.get('phase')||0),scale:Number(restored.get('scale')||22),
@@ -162,7 +165,7 @@ function renderSpectrum(){
  el.querySelectorAll('button').forEach(b=>b.onclick=()=>{setLevel(Number(b.dataset.level));toast('已定位到变化候选的高度。下一步可寻找临界点或做三档精度验证。');});
 }
 function setLevel(v){const p=preset();state.level=safe(v,p.min,p.max);$('#levelSlider').value=state.level;$('#levelValue').textContent=fmt(state.level);schedule();saveURL();}
-function saveURL(){const params=new URLSearchParams();params.set('world',state.id);params.set('level',state.level.toFixed(3));params.set('phase',state.phase.toFixed(3));params.set('scale',state.scale.toFixed(2));params.set('x',state.panX.toFixed(3));params.set('y',state.panY.toFixed(3));params.set('res',state.resolution);if(window.__lifeLens?.current?.id)params.set('life',window.__lifeLens.current.id);history.replaceState(null,'',location.pathname+'?'+params.toString());}
+function saveURL(){const params=new URLSearchParams();params.set('world',state.id);params.set('level',state.level.toFixed(3));params.set('phase',state.phase.toFixed(3));params.set('scale',state.scale.toFixed(2));params.set('x',state.panX.toFixed(3));params.set('y',state.panY.toFixed(3));params.set('res',state.resolution);if(document.body.dataset.page==='studio')params.set('screen','studio');if(window.__lifeLens?.current?.id)params.set('life',window.__lifeLens.current.id);history.replaceState(null,'',location.pathname+'?'+params.toString());}
 function worldFromClient(clientX,clientY){const r=canvas.getBoundingClientRect(),c=state.coords;if(!c)return null;return {x:c.x0+(clientX-r.left)/r.width*c.dx*c.nx,y:c.y0+(clientY-r.top)/r.height*c.dy*c.ny};}
 function updateProbe(ev){const pos=worldFromClient(ev.clientX,ev.clientY);if(!pos)return;const probe=$('#probe'),v=evaluateField(pos.x,pos.y,preset(),state.phase);
  probe.hidden=false;probe.style.left=Math.min(ev.clientX-canvas.getBoundingClientRect().left+16,canvas.clientWidth-180)+'px';
@@ -261,4 +264,8 @@ window.__lifeLens=setupLifeLens({
  setPhase:v=>{state.phase=v;$('#phaseSlider').value=v;$('#phaseValue').textContent=v.toFixed(2);schedule();saveURL();},
  enterResearch:()=>{const b=document.querySelector('.mode[data-mode="research"]');if(b)b.click();document.querySelector('#lifeResearch').textContent='研究模式已打开：下方可检验网格精度';},
  readStats:()=>state.contour?.stats,download:(data,name,type)=>downloadBlob(data,name,type)
+});
+window.__appShell=setupAppShell({initialSearch,life:window.__lifeLens,
+ activateResearch:mode=>document.querySelector('.mode[data-mode="'+mode+'"]').click(),
+ showExperiment:id=>selectPreset(id)
 });
