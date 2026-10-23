@@ -1,6 +1,6 @@
 // Node-only canonical build inputs. Included by Vite config and headless replay CLI.
 import {readFile} from 'node:fs/promises';
-import {execFileSync} from 'node:child_process';
+import {execFileSync,spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {dirname,resolve,join} from 'node:path';
@@ -15,6 +15,11 @@ export async function getNodeBuildProvenance(){
  let commit=process.env.VERCEL_GIT_COMMIT_SHA||process.env.GITHUB_SHA||'';
  if(!/^[a-f0-9]{40}$/i.test(commit)){try{commit=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8',timeout:2500}).trim();}catch{commit='unavailable';}}
  if(!/^[a-f0-9]{40}$/i.test(commit))commit='unavailable';
+ // A checked-out HEAD must not be presented as the origin of uncommitted math/lock changes.
+ // The independent math/lock content hashes remain available for local debugging.
+ const dirty=spawnSync('git',['status','--porcelain','--untracked-files=normal','--',...mathSources,'package-lock.json'],{cwd:root,encoding:'utf8',timeout:2500});
+ if(dirty.status===0&&dirty.stdout.trim())commit='unavailable';
+ else if(dirty.status!==0&&!/^[a-f0-9]{40}$/i.test(process.env.VERCEL_GIT_COMMIT_SHA||process.env.GITHUB_SHA||''))commit='unavailable';
  return {schema:PROVENANCE_SCHEMA,gitCommit:commit.toLowerCase(),
   lockSha256:sha(await readFile(join(root,'package-lock.json'))),
   mathSourceSha256:'sha256:'+h.digest('hex'),packageVersion:pkg.version,engine:'g2-replay/1.0'};

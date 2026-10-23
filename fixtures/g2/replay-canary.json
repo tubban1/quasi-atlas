@@ -13,7 +13,7 @@
     {
       "schema": "quasi-atlas.snapshot/1.0",
       "label": "Cross-env archipelago",
-      "createdAt": "2026-10-23T23:15:54.937Z",
+      "createdAt": "2026-10-23T23:21:39.954Z",
       "view": {
         "id": "archipelago",
         "level": 0.55,
@@ -92,14 +92,14 @@
         "notes": "G2 cross-environment canary",
         "engineVersion": "g0.1",
         "scientificHash": "sha256:7eca17b1f5ea2eb5eb667a6e02cd93c24eabf6997a5e99fffddb9ca927891d04",
-        "createdAt": "2026-10-23T23:15:54.936Z"
+        "createdAt": "2026-10-23T23:21:39.951Z"
       },
       "snapshotHash": "sha256:c752bac4c369cbb091b58e03fca1ca7eec12561331613bcd75bf8d38eb8e5378"
     },
     {
       "schema": "quasi-atlas.snapshot/1.0",
       "label": "Cross-env saddle",
-      "createdAt": "2026-10-23T23:15:54.940Z",
+      "createdAt": "2026-10-23T23:21:39.959Z",
       "view": {
         "id": "saddle",
         "level": 0.04,
@@ -178,14 +178,14 @@
         "notes": "G2 cross-environment canary",
         "engineVersion": "g0.1",
         "scientificHash": "sha256:5842fc120ace9e69c68feba27b42a6331c61878524b7d39faa532ee0b8f36664",
-        "createdAt": "2026-10-23T23:15:54.940Z"
+        "createdAt": "2026-10-23T23:21:39.958Z"
       },
       "snapshotHash": "sha256:d23f6ef426fbc3ec3261a7e769c78d01945a50d7966c397facc34db62dfe395a"
     },
     {
       "schema": "quasi-atlas.snapshot/1.0",
       "label": "Cross-env quasi",
-      "createdAt": "2026-10-23T23:15:54.952Z",
+      "createdAt": "2026-10-23T23:21:39.974Z",
       "view": {
         "id": "quasi",
         "level": 0.5,
@@ -264,7 +264,7 @@
         "notes": "G2 cross-environment canary",
         "engineVersion": "g0.1",
         "scientificHash": "sha256:e186da3f026f5d6cc51c806c9c44c632ad38fedd1faa78e7fe7c369f853469b6",
-        "createdAt": "2026-10-23T23:15:54.951Z"
+        "createdAt": "2026-10-23T23:21:39.974Z"
       },
       "snapshotHash": "sha256:599512dfda2d195eb62567b5206fc388bfc183ad2d45dc09cdecf901285d3bcf"
     }
@@ -278,12 +278,12 @@
   },
   "buildProvenance": {
     "schema": "quasi-atlas.build-provenance/1.0",
-    "gitCommit": "08c95ab15daea9b5b36c8b3bd30471861a2d1fac",
+    "gitCommit": "c32057b01e4166151a21b11aa274d475d7d5a4d2",
     "lockSha256": "sha256:66fd2f12727bb16df9cc30aa22c28618313e44826fdba397c49637c8c751b1a4",
     "mathSourceSha256": "sha256:3393c7753462b46ba042704f88e0a67d8c45eabd53b34f1070dcf60f42f42bc0",
     "packageVersion": "0.5.0-beta.2",
     "engine": "g2-replay/1.0"
   },
-  "notebookHash": "sha256:f1f804752d9db7d416a2e0309601a403aeb5120635256d3dfda8a3063ff9586e",
-  "exportedAt": "2026-10-23T23:15:55.117Z"
+  "notebookHash": "sha256:e17ca4fd35323c8b0ea42b25db261f1f8023a068d0bf3da6d81aae4dfd584c49",
+  "exportedAt": "2026-10-23T23:21:40.279Z"
 }
