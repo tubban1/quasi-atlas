@@ -1,9 +1,11 @@
 import './style.css';
 import './ui-v2.css';
+import './notebook.css';
 import {setupAppShell} from './shell.js';
 import {PRESETS,getPreset,evaluateField} from './math/fields.js';
 import {createModel,createExperiment} from './math/contract.js';
 import {setupLifeLens} from './life-ui.js';
+import {setupNotebook} from './notebook-ui.js';
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const canvas=$('#worldCanvas'),ctx=canvas.getContext('2d',{alpha:false}),wrap=$('#canvasWrap');
@@ -69,9 +71,9 @@ function updateInsights(){
 function computeSize(){const box=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);if(box.width<1||box.height<1)return;
   state.resizeWidth=box.width;state.resizeHeight=box.height;canvas.width=Math.round(box.width*dpr);canvas.height=Math.round(box.height*dpr);schedule();
 }
-function schedule(){clearTimeout(refreshTimer);refreshTimer=setTimeout(calculate,38);if(latestVerification){$('#verificationOutput').dataset.stale=String(experimentSignature()!==latestVerification.signature);if($('#verificationOutput').dataset.stale==='true')$('#verificationOutput').innerHTML='<span>参数已改变。上次报告仍可导出，但请重新运行三档精度验证。</span>';}}
+function schedule(){clearTimeout(refreshTimer);$('#numericStatus').textContent='参数待计算';window.__notebook?.markStale();refreshTimer=setTimeout(calculate,38);if(latestVerification){$('#verificationOutput').dataset.stale=String(experimentSignature()!==latestVerification.signature);if($('#verificationOutput').dataset.stale==='true')$('#verificationOutput').innerHTML='<span>参数已改变。上次报告仍可导出，但请重新运行三档精度验证。</span>';}}
 function calculate(){
- if(!state.resizeWidth)return;state.seq++;
+ refreshTimer=null;if(!state.resizeWidth)return;state.seq++;
  $('#numericStatus').textContent='计算中…';
  worker.postMessage({seq:state.seq,id:state.id,level:state.level,phase:state.phase,scale:state.scale,panX:state.panX,panY:state.panY,resolution:state.resolution,width:state.resizeWidth,height:state.resizeHeight});
 }
@@ -85,7 +87,7 @@ worker.onmessage=ev=>{
  state.coords=m.coords;state.contour=m.contour;
  if(m.spectrum){state.spectrum=m.spectrum;renderSpectrum();}
  render();updateStats();window.__lifeLens?.measure();
- $('#numericStatus').textContent='计算完成';
+ $('#numericStatus').textContent='计算完成';window.__notebook?.markStale();
  $('#loading')?.remove();
 };
 let rasterDirty=true;
@@ -268,4 +270,35 @@ window.__lifeLens=setupLifeLens({
 window.__appShell=setupAppShell({initialSearch,life:window.__lifeLens,
  activateResearch:mode=>document.querySelector('.mode[data-mode="'+mode+'"]').click(),
  showExperiment:id=>selectPreset(id)
+});
+
+function notebookView(){return {id:state.id,level:state.level,phase:state.phase,scale:state.scale,
+ panX:state.panX,panY:state.panY,resolution:state.resolution,mode:state.mode,view:state.view,theme:state.theme};}
+function notebookInputs(){
+ if(window.__lifeLens?.current?.id==='beats')return {ready:false,reason:'一维声波教程尚未接入二维等值线实验复算；请切换二维世界。'};
+ if(!state.contour||!state.coords||$('#numericStatus').textContent!=='计算完成'||refreshTimer!==null)
+  return {ready:false,reason:'正在计算当前二维地图。计算完成后可保存新的不可变快照。'};
+ const {nx,ny,x0,y0,dx,dy}=state.coords;
+ return {ready:true,view:notebookView(),bounds:{xmin:x0,xmax:x0+nx*dx,ymin:y0,ymax:y0+ny*dy},resolution:[nx,ny]};
+}
+window.__notebook=setupNotebook({
+ isValidField:notebookInputs,
+ async capture(){
+  const inputs=notebookInputs();
+  if(!inputs.ready)throw new Error(inputs.reason);
+  const model=createModel({presetId:state.id,phase:state.phase,level:state.level,
+    bounds:inputs.bounds,resolution:inputs.resolution});
+  const scientific=await createExperiment({model,observations:state.contour.stats,algorithm:state.contour.algorithm});
+  return {view:notebookView(),scientific};
+ },
+ restore(view){
+  window.__lifeLens?.hide();selectPreset(view.id);
+  Object.assign(state,{id:view.id,level:view.level,phase:view.phase,scale:view.scale,
+    panX:view.panX,panY:view.panY,resolution:view.resolution,view:view.view,theme:view.theme});
+  rasterDirty=true;$('#phaseSlider').value=state.phase;$('#scaleSlider').value=state.scale;$('#detailSlider').value=state.resolution;
+  updateStatic();$('#viewLabel').textContent=state.view==='terrain'?'地貌':state.view==='heat'?'色场':'线稿';
+  const mode=document.querySelector('.mode[data-mode="'+view.mode+'"]');if(mode)mode.click();
+  schedule();saveURL();
+ },
+ download:downloadBlob,showMessage:toast
 });

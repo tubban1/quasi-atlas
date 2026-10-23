@@ -1,4 +1,6 @@
-# Quasi Atlas · 数学秘境 (UI 2.0 · G1 Everyday Math beta)
+# Quasi Atlas · 数学秘境 (G2 Discovery Notebook beta)
+
+**v0.5.0-beta.1 · G2 已实现的体验**：从探索工作台点击「▤ 发现日志」，记录问题/预测/观察/反例/结论，保存不可变的 E1 快照，比较两次实验并使用相同数学引擎离线复算。支持 Notebook JSON/CSV 导出及安全导入、旧 G0 实验迁移。完整说明及未完成的跨设备验收见 [G2 Notebook & Replay](docs/G2_NOTEBOOK_REPLAY.md)。
 
 **0.4.0 全新产品界面**：发现首页（六个生活数学场景）→ 集中式数学探索工作台 → G0–G6 研究路线。保留现有实际计算和 E0/E1 科学分级。见 [UI 2.0 信息架构](docs/UI_2_INFORMATION_ARCHITECTURE.md)。
 
@@ -6,7 +8,7 @@
 
 **G1 六个可互动生活数学主题已加入：** 山路、积水、温度、拍频（1D）、摩尔纹、Wi‑Fi。学习流程为预测、动手、解释、反例、研究/JSON。所有现实类比均标记为合成模型；详见 [docs/G1_CICD_RUNBOOK.md](docs/G1_CICD_RUNBOOK.md)。
 
-**本地质量门禁：** npm run gate · npm run build · npm run test:ui · npm run test:browser。Vercel Git 自动部署使用 vercel.json：测试通过后发布。GitHub Actions 已配置但账户付费/支出上限目前阻止 runner 执行，详情见运行手册。正式站：https://math.edunest.app/。
+**本地质量门禁：** npm run gate · npm run build · npm run test:g2 · npm run test:ui · npm run test:browser。Vercel Git 自动部署使用 vercel.json：测试通过后发布。GitHub Actions 已配置但账户付费/支出上限目前阻止 runner 执行，详情见运行手册。正式站：https://math.edunest.app/。
 
 **部署域名**：https://math.edunest.app/（独立 Vercel 项目 quasi-atlas-math）
 

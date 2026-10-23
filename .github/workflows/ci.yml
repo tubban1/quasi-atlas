@@ -47,6 +47,7 @@ jobs:
           for i in $(seq 1 35); do curl -fsS http://127.0.0.1:5188/ >/dev/null && break || sleep 1; done
           npm run test:browser
           npm run test:ui
+          npm run test:g2
           node scripts/smoke.mjs
   deploy-production:
     needs: [scientific-gate, browser-gate]

@@ -72,11 +72,11 @@
    <button type="button" class="pathway-card" data-launch-mode="research"><span class="pathway-ordinal">C / QUESTION</span><span class="pathway-icon">⌁</span><strong>严谨研究</strong><small>查看模型、网格精度与计算证据</small><span class="pathway-link">进入研究模式 ↗</span></button>
   </section>
   <section class="home-bottom"><div><span class="section-kicker">THE SCIENCE BEHIND THE MAGIC</span><h2>美丽是开始。证据让发现走得更远。</h2><p>我们区分教学示意、有限区域数值观察与数学证明。没有研究认证的功能，不会被包装成“已经证明”。</p></div><button type="button" class="outline-link" data-screen="roadmap">看看接下来要做什么 ↗</button></section>
-  <footer class="site-foot"><span>© Quasi Atlas · eduNest</span><span>Designed for curiosity. Grounded in evidence.</span><span>Local-first · G1 Beta</span></footer>
+  <footer class="site-foot"><span>© Quasi Atlas · eduNest</span><span>Designed for curiosity. Grounded in evidence.</span><span>Local-first · G2 Beta</span></footer>
  </div>
 </section>
 <section class="page studio-page" id="studioScreen" aria-label="Quasi Atlas 互动探索工作台" hidden>
- <div class="studio-bar"><div class="studio-breadcrumb"><button type="button" data-screen="home">← 发现</button><span>/</span><span>探索工作台</span></div><div class="studio-headline"><span class="section-kicker">INTERACTIVE MATHEMATICS</span><strong>在这里，每一个变化都看得见。</strong></div><div class="mode-switch" role="tablist" aria-label="探索深度"><button class="mode active" data-mode="wander" role="tab" aria-selected="true">漫游</button><button class="mode" data-mode="learn" role="tab" aria-selected="false">理解</button><button class="mode" data-mode="research" role="tab" aria-selected="false">研究</button></div><div class="studio-tools"><button class="studio-tool" id="copyLink" type="button" title="复制可复现实验链接" aria-label="分享实验链接">↗ 分享</button><button class="studio-tool" id="themeToggle" type="button" title="切换数学图层配色" aria-label="切换画布配色">◐ 配色</button></div></div>
+ <div class="studio-bar"><div class="studio-breadcrumb"><button type="button" data-screen="home">← 发现</button><span>/</span><span>探索工作台</span></div><div class="studio-headline"><span class="section-kicker">INTERACTIVE MATHEMATICS</span><strong>在这里，每一个变化都看得见。</strong></div><div class="mode-switch" role="tablist" aria-label="探索深度"><button class="mode active" data-mode="wander" role="tab" aria-selected="true">漫游</button><button class="mode" data-mode="learn" role="tab" aria-selected="false">理解</button><button class="mode" data-mode="research" role="tab" aria-selected="false">研究</button></div><div class="studio-tools"><button class="studio-tool notebook-open" id="openNotebook" type="button" aria-haspopup="dialog">▤ 发现日志 <span id="nbCount">0</span></button><button class="studio-tool" id="copyLink" type="button" title="复制可复现实验链接" aria-label="分享实验链接">↗ 分享</button><button class="studio-tool" id="themeToggle" type="button" title="切换数学图层配色" aria-label="切换画布配色">◐ 配色</button></div></div>
 <div class="layout">
 <aside class="rail left-panel">
   <div class="rail-scroll">
@@ -153,6 +153,44 @@
   <footer class="site-foot"><span>Quasi Atlas · Research roadmap</span><button type="button" data-screen="home">回到首页 ↑</button></footer>
  </div>
 </section>
+<dialog id="notebookDialog" class="notebook-dialog" aria-labelledby="nbHeading">
+ <div class="nb-shell">
+  <header class="nb-header"><div><span class="section-kicker">G2 / DISCOVERY NOTEBOOK</span><h2 id="nbHeading">把好奇，写成一次发现。</h2><p>只存于这台设备的浏览器。导出 JSON 文件可跨设备复算，无需账号。</p></div><button type="button" id="nbClose" class="nb-close" aria-label="关闭发现日志">×</button></header>
+  <div class="nb-body">
+   <section class="nb-editor" aria-label="记录新的研究">
+    <span class="nb-overline">01 · 写下想法</span>
+    <label class="nb-label" for="nbTitle">笔记本标题</label><input id="nbTitle" type="text" maxlength="120" value="我的数学发现" placeholder="给这本研究日志起个名字"/>
+    <label class="nb-label" for="nbQuestion">我想知道什么？</label><textarea id="nbQuestion" rows="2" maxlength="1400" placeholder="例如：两条线什么时候会连接起来？"></textarea>
+    <label class="nb-label" for="nbHypothesis">我先猜</label><textarea id="nbHypothesis" rows="2" maxlength="1400" placeholder="改变这个参数，可能出现什么变化？"></textarea>
+    <label class="nb-label" for="nbObservation">我实际观察到</label><textarea id="nbObservation" rows="2" maxlength="1400" placeholder="描述你真正看到了什么。"></textarea>
+    <label class="nb-label" for="nbCounterexample">有什么反例或局限？</label><textarea id="nbCounterexample" rows="2" maxlength="1400" placeholder="哪里可能让解释不成立？"></textarea>
+    <label class="nb-label" for="nbConclusion">目前的结论</label><textarea id="nbConclusion" rows="2" maxlength="1400" placeholder="哪些是观察，哪些仍是猜测？"></textarea>
+    <span class="nb-overline nb-margin">02 · 保存当前实验</span>
+    <label class="nb-label" for="nbLabel">快照名称</label><input id="nbLabel" type="text" maxlength="100" placeholder="例如：水位 0.8 的连通结构"/>
+    <button class="nb-primary" type="button" id="nbCapture">✧ 记录当前模型 + 数值结果</button>
+    <p class="nb-hint" id="nbStale" role="status">请打开二维数学世界并完成计算，然后记录不可变快照。</p>
+   </section>
+   <section class="nb-library" aria-label="已保存的实验">
+    <div class="nb-library-head"><span class="nb-overline">03 · 已保存的实验</span><span id="nbStorageInfo">浏览器本地</span></div>
+    <div id="nbList" class="nb-list" aria-live="polite"></div>
+    <div class="nb-select-row"><button type="button" class="nb-soft" id="nbRestore" disabled>↺ 恢复所选视图</button><button type="button" class="nb-soft" id="nbReplay" disabled>⌕ 使用同引擎复算</button><button type="button" class="nb-danger" id="nbDelete" disabled>删除</button></div>
+    <div class="nb-replay" id="nbReplayOutput" aria-live="polite">复算使用实验包里的固定世界坐标、float32 栅格和已审计预设。两台设备渲染大小不同也不影响数学输入。</div>
+    <div class="nb-divider"></div>
+    <span class="nb-overline">04 · 并排比较两次观察</span>
+    <div class="nb-compare-controls"><label for="nbCompareA">之前</label><select id="nbCompareA"></select><label for="nbCompareB">之后</label><select id="nbCompareB"></select></div>
+    <button type="button" class="nb-soft nb-compare-action" id="nbCompare" disabled>比较变化 →</button>
+    <div id="nbComparison" class="nb-comparison" aria-live="polite">保存两次不同的快照，就能比较参数和等值线统计。</div>
+    <div class="nb-divider"></div>
+    <span class="nb-overline">05 · 带走你的研究记录</span>
+    <p class="nb-description">JSON 包含数学模型与哈希，可通过离线 CLI 重新计算；CSV 便于列表分析。SVG 则导出当前工作台可视化（不是数学证明）。</p>
+    <div class="nb-export-actions"><button type="button" class="nb-export" id="nbExportJSON">↓ Notebook JSON</button><button type="button" class="nb-export" id="nbExportCSV">↓ CSV</button><button type="button" class="nb-export" id="nbExportSVG">↓ 当前曲线 SVG</button></div>
+    <label class="nb-import-label" for="nbImport">↑ 导入已有 Notebook JSON</label><input type="file" id="nbImport" accept=".json,application/json"/>
+    <p class="nb-hint">导入会替换本机当前笔记。支持 Notebook 1.0 和经过审核的旧 G0 实验 JSON。均须通过 SHA-256 与数学契约验证；不执行文件内代码。</p>
+   </section>
+  </div>
+  <footer class="nb-footer"><span><b>E1 · 有限网格的数值观察</b> — 相同输入的重算匹配不代表数学认证。</span><strong id="nbStatus" role="status" aria-live="polite">准备就绪</strong></footer>
+ </div>
+</dialog>
 <div id="toast" role="status" aria-live="polite"></div>
 </div>
 <script type="module" src="/src/main.js"></script>

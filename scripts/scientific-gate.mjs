@@ -4,7 +4,7 @@ import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {join,dirname} from 'node:path';
 const root=dirname(dirname(fileURLToPath(import.meta.url)));
-const required=['contract.test.js','golden.test.js','life.test.js','math.test.js','verify.test.js'];
+const required=['contract.test.js','golden.test.js','life.test.js','math.test.js','verify.test.js','notebook.test.js'];
 let found=[];
 try{found=readdirSync(join(root,'tests')).filter(f=>f.endsWith('.test.js'));}catch(e){console.error('FATAL: Tests directory not bundled for build');process.exit(2);}
 const missing=required.filter(x=>!found.includes(x));
@@ -16,5 +16,5 @@ if(p.error||p.status!==0){console.error('FATAL: mathematical or educational test
 const n=Number((p.stdout||'').match(/^# tests ([0-9]+)$/m)?.[1]||0);
 const passed=Number((p.stdout||'').match(/^# pass ([0-9]+)$/m)?.[1]||0);
 const failed=Number((p.stdout||'').match(/^# fail ([0-9]+)$/m)?.[1]||-1);
-if(n<44||passed!==n||failed!==0){console.error('FATAL: insufficient or missing tests', {n,passed,failed});process.exit(2);}
+if(n<62||passed!==n||failed!==0){console.error('FATAL: insufficient or missing tests', {n,passed,failed});process.exit(2);}
 console.log('SCIENTIFIC_GATE_PASS '+passed+'/'+n+' across '+found.length+' files');

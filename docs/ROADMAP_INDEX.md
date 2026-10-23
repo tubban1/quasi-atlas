@@ -1,8 +1,8 @@
 # Quasi Atlas · 研究级规划文档入口
 
-**制定日期：2026-10-23 | 原基线 0.2；截至 2026-10-24，G0 已实施、G1 首批六张合成教学卡已实施，教育实证及真实开放数据仍待验收。**
+**制定日期：2026-10-23 | 原基线 0.2；截至 2026-10-24，G0/G1 工程已实施，G2 Notebook Beta 正在验收；跨物理设备复算、教育实证及真实开放数据仍待验收。**
 
-全新 UI 信息架构见 [UI_2_INFORMATION_ARCHITECTURE.md](UI_2_INFORMATION_ARCHITECTURE.md)，生产研发流程见 [G1_CICD_RUNBOOK.md](G1_CICD_RUNBOOK.md)，实际 G1 验收与 GitHub Actions 账单阻塞见 [G1_DELIVERY_REPORT.md](G1_DELIVERY_REPORT.md)。
+G2 当前实施、复算协议与限制见 [G2_NOTEBOOK_REPLAY.md](G2_NOTEBOOK_REPLAY.md)。全新 UI 信息架构见 [UI_2_INFORMATION_ARCHITECTURE.md](UI_2_INFORMATION_ARCHITECTURE.md)，生产研发流程见 [G1_CICD_RUNBOOK.md](G1_CICD_RUNBOOK.md)，实际 G1 验收与 GitHub Actions 账单阻塞见 [G1_DELIVERY_REPORT.md](G1_DELIVERY_REPORT.md)。
 
 > 一句话：从看见生活中的数学，到亲自提出可证伪猜想，再到可信赖、可复现的科学实验。产品允许人人进入；研究级结论必须遵守严格限定。
 
@@ -17,7 +17,7 @@
 ## 总路线图 / 发布门禁
 
 ~~~text
-当前 0.2：启发式数值探索
+当前 v0.5.0-beta.1：G0/G1 已实施，G2 Notebook 工程 Beta（跨机器验证待完成）
      |
 G0 科学地基 ── 定义、12 golden fixtures、可靠数据/证据 schema
      |
@@ -56,4 +56,4 @@ Research Edition 1.0（目标：受限领域内可信、可重复）
 
 ## 文件状态
 
-目前完成的是**设计规划文档**，不是未来 G0–G6 代码实现。文档需要在 G0 实际开始时转化为 issue 与 acceptance fixtures；涉及研究级数学判断的部分要外部专家审核。
+本 Roadmap 为**计划及验收标准**；G0/G1 与 G2 Notebook Beta 已有代码，但 G2 跨物理设备验收及 G3–G6 研究能力尚未完成。文档需要在 G0 实际开始时转化为 issue 与 acceptance fixtures；涉及研究级数学判断的部分要外部专家审核。
