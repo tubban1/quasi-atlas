@@ -1,5 +1,7 @@
 # Quasi Atlas · 数学秘境 (v0.2)
 
+> **科研级完整规划已形成**：[规划文档总入口](docs/ROADMAP_INDEX.md) ｜[总路线图](docs/RESEARCH_GRADE_MASTER_PLAN.md) ｜[生活与数学体验](docs/EVERYDAY_MATH_EXPERIENCE_SPEC.md) ｜[科学验证协议](docs/SCIENTIFIC_VALIDATION_PROTOCOL.md) ｜[技术与交付计划](docs/TECH_ARCHITECTURE_AND_DELIVERY.md)。这些是**下一阶段规划**，不代表科研级功能已上线。
+
 **启动和 v0.2 研究功能说明：参见 [docs/START_AND_RESEARCH.md](docs/START_AND_RESEARCH.md)。**
 
 最简单的启动方式：
