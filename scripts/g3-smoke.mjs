@@ -17,8 +17,9 @@ try{
  await p.locator('#runH0').click();
  await p.waitForFunction(()=>document.querySelector('#h0Audit')?.dataset.status==='MATCH',{timeout:20000});
  assert.ok(Number(await p.locator('#h0Overview strong').textContent())>=0);
+ assert.match(await p.locator('.h0-hole-count').textContent(),/有限网格 H1/);
  assert.ok(await p.locator('.h0-bar-row').count()>0);
- assert.match(await p.locator('#h0Limits').textContent(),/H1 尚未计算/);
+ assert.match(await p.locator('#h0Limits').textContent(),/H1 仅计算各高度的洞数量/);
  out.desktop.push('superlevel H0 vs independent flood MATCH');
  await p.locator('#h0Direction').selectOption('sublevel');
  assert.equal(await p.locator('#h0Freshness').getAttribute('data-stale'),'true');
@@ -32,6 +33,7 @@ try{
  assert.equal(data.schema,'quasi-atlas.h0-audit/1.0');
  assert.equal(data.reference.status,'MATCH');
  assert.equal(data.persistence.evidence,'E1');assert.equal(data.persistence.certified,false);
+ assert.equal(data.holes.schema,'quasi-atlas.cubical-betti/1.0');
  assert.equal(data.source.id,'archipelago');
  out.desktop.push('research JSON E1 export');
  await p.locator('#levelSlider').evaluate(e=>{e.value=String(Math.min(Number(e.max),Number(e.value)+.55));e.dispatchEvent(new Event('input',{bubbles:true}));});

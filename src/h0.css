@@ -22,5 +22,6 @@
 .h0-bar-fill{height:100%;border-radius:6px;background:#58a68a}
 .h0-bar-fill.essential{background:#a0b76a}
 .h0-freshness{font-size:10px;color:#648d70}.h0-freshness[data-stale=true]{color:#a36b47}
+.h0-hole-count{color:#3b806b;font-weight:700;font-size:13px;padding:4px 2px}
 #exportH0{padding:10px;border:1px solid #c3dbca;border-radius:8px;background:#eff7ee;color:#356a4e;font-weight:750;font-size:11px}
 #exportH0:disabled{opacity:.45}

@@ -3,6 +3,7 @@ import {extractContours,buildSpectrum} from './math/contours.js';
 import {locateCriticalPoints,verifyLevel} from './math/verify.js';
 import {analyzeH0} from './math/topology-h0.js';
 import {auditH0AgainstFlood} from './math/h0-flood-reference.js';
+import {cubicalBettiSweep} from './math/cubical-h1.js';
 let gridKey='',cache=null;
 self.onmessage=(ev)=>{
  const d=ev.data,{seq,id,level,phase,scale,panX,panY,resolution,width,height,wantsSpectrum}=d;
@@ -21,7 +22,8 @@ self.onmessage=(ev)=>{
    const thresholds=[preset.min,level-range*.02,level,level+range*.02,preset.max].filter(Number.isFinite);
    const result=analyzeH0(values,gx,gy,{direction,thresholds,maxBars:22});
    const crossCheck=auditH0AgainstFlood(values,gx,gy,result);
-   self.postMessage({action:'topology-h0',requestId:d.requestId,signature:d.signature,result,crossCheck,
+   const holes=cubicalBettiSweep(values,gx,gy,thresholds,direction);
+   self.postMessage({action:'topology-h0',requestId:d.requestId,signature:d.signature,result,crossCheck,holes,
     source:{id,phase,level,worldDomain:{xmin:bounds.x0,xmax:bounds.x1,ymin:bounds.y0,ymax:bounds.y1},nx:gx,ny:gy,floatFormat:'float32'}});
    return;
   }

@@ -1,8 +1,8 @@
 # Quasi Atlas · 研究级规划文档入口
 
-**制定日期：2026-10-23 | 原基线 0.2；截至 2026-10-24，G0/G1 工程已实施，G2 Notebook Beta 的 Mac↔Linux 同引擎固定样例复现已通过，Windows 真实设备也完成了同引擎固定样例验收；G3.1 有限顶点网格 H0 与第三方 GUDHI 3.11.0 已完成 30 组/1,048 条区间对照；H1、TTK、科研级认证、教育实证及真实开放数据仍待验收。**
+**制定日期：2026-10-23 | 原基线 0.2；截至 2026-10-24，G0/G1 工程已实施，G2 Notebook Beta 的 Mac↔Linux 同引擎固定样例复现已通过，Windows 真实设备也完成了同引擎固定样例验收；G3.1 有限顶点网格 H0 与第三方 GUDHI 3.11.0 已完成 30 组/1,048 条区间对照；G3.2 的 H1 有限网格 480 个阈值已与 GUDHI 验证；G4 精确有理数受限原型、G5 36 组准周期实验和 G6 本地自测/发布门禁已落地。但 H1 持久配对、TTK、G4 认证、论文复现、真人教育评估及外部审稿均未放行。**
 
-G3.1 已实施的 H0/GUDHI 独立对照、固定基准与限制见 [G3_H0_INDEPENDENT_REFERENCE.md](G3_H0_INDEPENDENT_REFERENCE.md)。G2 当前实施、复算协议与限制见 [G2_NOTEBOOK_REPLAY.md](G2_NOTEBOOK_REPLAY.md)，跨环境验证命令与证据要求见 [G2_CROSS_RUNTIME_QUALIFICATION.md](G2_CROSS_RUNTIME_QUALIFICATION.md)。工作台渐进式信息架构见 [STUDIO_FOCUS_INFORMATION_ARCHITECTURE.md](STUDIO_FOCUS_INFORMATION_ARCHITECTURE.md)，Windows 实机验收见 [G2_WINDOWS_ACCEPTANCE.md](G2_WINDOWS_ACCEPTANCE.md)。全新 UI 信息架构见 [UI_2_INFORMATION_ARCHITECTURE.md](UI_2_INFORMATION_ARCHITECTURE.md)，生产研发流程见 [G1_CICD_RUNBOOK.md](G1_CICD_RUNBOOK.md)，实际 G1 验收与 GitHub Actions 账单阻塞见 [G1_DELIVERY_REPORT.md](G1_DELIVERY_REPORT.md)。
+G3–G6 目前各阶段真实工程范围与剩余阻塞见 [G3_G6_ENGINEERING_DELIVERY.md](G3_G6_ENGINEERING_DELIVERY.md)。G3.1 已实施的 H0/GUDHI 独立对照、固定基准与限制见 [G3_H0_INDEPENDENT_REFERENCE.md](G3_H0_INDEPENDENT_REFERENCE.md)。G2 当前实施、复算协议与限制见 [G2_NOTEBOOK_REPLAY.md](G2_NOTEBOOK_REPLAY.md)，跨环境验证命令与证据要求见 [G2_CROSS_RUNTIME_QUALIFICATION.md](G2_CROSS_RUNTIME_QUALIFICATION.md)。工作台渐进式信息架构见 [STUDIO_FOCUS_INFORMATION_ARCHITECTURE.md](STUDIO_FOCUS_INFORMATION_ARCHITECTURE.md)，Windows 实机验收见 [G2_WINDOWS_ACCEPTANCE.md](G2_WINDOWS_ACCEPTANCE.md)。全新 UI 信息架构见 [UI_2_INFORMATION_ARCHITECTURE.md](UI_2_INFORMATION_ARCHITECTURE.md)，生产研发流程见 [G1_CICD_RUNBOOK.md](G1_CICD_RUNBOOK.md)，实际 G1 验收与 GitHub Actions 账单阻塞见 [G1_DELIVERY_REPORT.md](G1_DELIVERY_REPORT.md)。
 
 > 一句话：从看见生活中的数学，到亲自提出可证伪猜想，再到可信赖、可复现的科学实验。产品允许人人进入；研究级结论必须遵守严格限定。
 

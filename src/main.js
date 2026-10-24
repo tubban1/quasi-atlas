@@ -5,6 +5,8 @@ import './studio-focus.css';
 import './h0.css';
 import {setupH0UI} from './h0-ui.js';
 import {setupStudioFocus} from './studio-focus.js';
+import './education/transfer.css';
+import {setupTransferUI} from './education/transfer-ui.js';
 import {setupAppShell} from './shell.js';
 import {PRESETS,getPreset,evaluateField} from './math/fields.js';
 import {createModel,createExperiment} from './math/contract.js';
@@ -309,6 +311,7 @@ window.__notebook=setupNotebook({
 });
 
 window.__studioFocus=setupStudioFocus();
+setupTransferUI();
 // G3.1 is progressive disclosure inside Research, not another permanent panel.
 h0UI=setupH0UI({
  signature:experimentSignature,

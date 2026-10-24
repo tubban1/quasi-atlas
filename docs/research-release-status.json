@@ -1,0 +1,66 @@
+{
+  "schema": "quasi-atlas.research-release-gates/1.0",
+  "releaseTier": "engineering-beta",
+  "lastUpdated": "2026-10-24",
+  "gates": {
+    "G3": {
+      "engineering": "PARTIAL",
+      "scientific": "BLOCKED",
+      "completed": [
+        "H0 1048 intervals matched GUDHI v3.11.0",
+        "H1 480 threshold counts matched GUDHI"
+      ],
+      "open": [
+        "H1 persistence barcodes and branch tracking",
+        "TTK reference cases",
+        "critical-event degenerate/multiresolution review"
+      ]
+    },
+    "G4": {
+      "engineering": "PROTOTYPE",
+      "scientific": "BLOCKED",
+      "completed": [
+        "exact rational radial quadratic independent verifier"
+      ],
+      "open": [
+        "outward-rounded interval arithmetic",
+        "general bounded certification scope",
+        "external numerical mathematician review"
+      ]
+    },
+    "G5": {
+      "engineering": "PROTOTYPE",
+      "scientific": "BLOCKED",
+      "completed": [
+        "36-case finite quasiperiodic parameter scan hash replay"
+      ],
+      "open": [
+        "specific paper/theorem hypothesis matching",
+        "independent research review",
+        "long-range uncertainty study"
+      ]
+    },
+    "G6": {
+      "engineering": "PARTIAL",
+      "scientific": "BLOCKED",
+      "completed": [
+        "local-only six-item formative transfer assessment",
+        "review protocol and release gate"
+      ],
+      "open": [
+        "two independent educator reviews",
+        "one independent mathematical reviewer",
+        "actual anonymous study/consent results",
+        "accessibility audit with assistive technology",
+        "open-source license and permissions approval"
+      ]
+    }
+  },
+  "externalApprovals": {
+    "educator1": null,
+    "educator2": null,
+    "mathematics": null
+  },
+  "researchReady": false,
+  "publicLaunchApproved": false
+}

@@ -1,6 +1,6 @@
 # G3.1 — Finite-grid H0 persistence and independent reference (2026-10-24)
 
-**Status: G3.1 Beta implemented, not full G3 scientific qualification.**
+**Historical G3.1 H0 acceptance.** Finite H1 threshold counts were subsequently implemented and GUDHI-compared in [G3–G6 engineering delivery](G3_G6_ENGINEERING_DELIVERY.md). Neither full H1 persistence pair tracking nor Gate G3 is complete.
 
 ## Why an ordinary person might care
 

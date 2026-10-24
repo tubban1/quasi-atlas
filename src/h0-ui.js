@@ -7,12 +7,14 @@ export function setupH0UI({request,signature,download,notify}){
    $('h0Freshness').dataset.stale=String(changed);exportButton.disabled=changed;
  };
  function render(msg){
-  const {result,crossCheck,source}=msg;
+  const {result,crossCheck,source,holes}=msg;
   const atLevel=result.thresholds.find(x=>x.level===source.level);
   const title=$('h0Overview');title.replaceChildren();
   const val=document.createElement('strong');val.textContent=atLevel?.components??'—';
   const info=document.createElement('span');info.textContent='个离散连通区域 · '+(result.filtration==='superlevel'?'高于阈值':'低于阈值');
   title.append(val,info);
+  const atH1=holes?.results.find(x=>x.level===source.level);
+  const hole=document.createElement('div');hole.className='h0-hole-count';hole.textContent='◌ '+(atH1?.betti1??'—')+' 个洞 · 有限网格 H1';title.after(hole);const old=title.parentElement.querySelectorAll('.h0-hole-count');if(old.length>1)old[0].remove();
   $('h0Audit').textContent=crossCheck.status==='MATCH'?
    '✓ 两套算法一致：并查集 H0 与独立 BFS 在 '+crossCheck.checks.length+' 个阈值均匹配。':
    '⚠ 发现差异，不能认定本次数值结果稳定。';
@@ -30,7 +32,7 @@ export function setupH0UI({request,signature,download,notify}){
   }
   $('h0Limits').textContent='有限 '+source.nx+'×'+source.ny+' 网格；'+result.positiveFiniteBars+
    ' 条正持续区间；'+result.truncatedBars+' 条因列表限制未展示。零长度配对 '+result.zeroLengthBars+
-   ' 条被排除。边界开放且不作周期连接；H1 尚未计算。';
+   ' 条被排除。边界开放且不作周期连接；H1 仅计算各高度的洞数量，尚无 H1 持久条形码。';
  }
  run.addEventListener('click',()=>{
   const direction=$('h0Direction').value;
@@ -44,7 +46,7 @@ export function setupH0UI({request,signature,download,notify}){
  exportButton.addEventListener('click',()=>{
   if(!last||signature()!==last.signature||$('h0Direction').value!==last.result.filtration)return notify('输入或分析方向已变化，请重新分析 H0');
   const report={schema:'quasi-atlas.h0-audit/1.0',createdAt:new Date().toISOString(),
-    source:last.source,persistence:last.result,reference:last.crossCheck,
+    source:last.source,persistence:last.result,holes:last.holes,reference:last.crossCheck,
     evidence:'E1',scientificClaim:'Finite vertex-graph H0; not continuous topology, TTK/GUDHI certification or proof.'};
   download(JSON.stringify(report,null,2),'quasi-atlas-h0-audit.json','application/json');
  });

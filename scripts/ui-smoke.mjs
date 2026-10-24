@@ -19,8 +19,8 @@ try{
  assert.equal(await desktop.locator('#roadmapScreen').isVisible(),true);
  assert.equal(await desktop.locator('#roadmapTimeline .milestone').count(),7,'G0–G6 timeline');
  assert.equal(await desktop.locator('.milestone-done').count(),1);
- assert.equal(await desktop.locator('.milestone-progress').count(),3);
- assert.equal(await desktop.locator('.milestone-planned').count(),3);
+ assert.equal(await desktop.locator('.milestone-progress').count(),6);
+ assert.equal(await desktop.locator('.milestone-planned').count(),0);
  await desktop.locator('#roadmapTimeline .milestone').last().locator('summary').click();
  await desktop.screenshot({path:'docs/ui-roadmap-desktop.png',fullPage:true,animations:'disabled'});
  report.screens.push('roadmap');

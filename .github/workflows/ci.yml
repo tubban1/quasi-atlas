@@ -28,6 +28,11 @@ jobs:
           python3 -m venv /tmp/quasi-g3-gudhi
           /tmp/quasi-g3-gudhi/bin/pip install --disable-pip-version-check 'gudhi==3.11.0' 'numpy==2.4.6'
           /tmp/quasi-g3-gudhi/bin/python scripts/g3_gudhi_reference.py --verify
+          /tmp/quasi-g3-gudhi/bin/python scripts/g3_h1_gudhi.py verify
+      - name: Replay G5 finite-window sweep and assert G6 research readiness is blocked
+        run: |
+          node scripts/g5_sweep.mjs verify
+          node scripts/research-release-gate.mjs
       - name: Production build
         run: npm run build
       - name: Prevent accidental secret configuration bundling
@@ -57,6 +62,7 @@ jobs:
           npm run test:studio
           npm run test:g2
           npm run test:g3
+          npm run test:g6
           node scripts/smoke.mjs
   deploy-production:
     needs: [scientific-gate, browser-gate]

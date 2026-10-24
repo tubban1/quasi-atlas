@@ -1,6 +1,8 @@
-# Quasi Atlas · 数学秘境 (G3.1 H0 Beta)
+# Quasi Atlas · 数学秘境（G3–G6 工程 Beta）
 
-**G3.1 已实施**：研究模式新增默认折叠的「区域如何出现、合并？ · H0 实验」，可分别观察高于/低于阈值的有限网格连通分量及主要持久区间，导出 E1 报告。30 组固定样例/480 阈值核对通过，并使用独立第三方 GUDHI 3.11.0 生成 **1,048 条 H0 区间**逐条验证。H1、TTK 和完整 G3 科研认证尚未完成，详见 [G3 H0 验证文档](docs/G3_H0_INDEPENDENT_REFERENCE.md)。
+**G3–G6 新增进度（非科研正式认证）**：G3 已实现 H1 有限网格逐阈值洞数量并与 GUDHI 480 阈值核对；G4 有限定二次函数的有理数精确验证原型，禁止冒充 E3；G5 36 个可重放的准周期数值实验；G6 六题本机数学理解自测及研究级发布阻塞门禁。**四个 Gate 均未完整放行**，详情见 [G3–G6 交付及待办](docs/G3_G6_ENGINEERING_DELIVERY.md) 与 [研究状态 JSON](docs/research-release-status.json)。
+
+**G3.1 已实施**：研究模式新增默认折叠的「区域如何出现、合并？ · H0 实验」，可分别观察高于/低于阈值的有限网格连通分量及主要持久区间，导出 E1 报告。30 组固定样例/480 阈值核对通过，并使用独立第三方 GUDHI 3.11.0 生成 **1,048 条 H0 区间**逐条验证。H1 逐阈值计数已追加，但 H1 持久配对、TTK 和完整 G3 科研认证尚未完成，详见 [G3 H0 验证文档](docs/G3_H0_INDEPENDENT_REFERENCE.md)。
 
 **v0.5.0-beta.2 · G2 已实现的体验**：从探索工作台点击「▤ 发现日志」，记录问题/预测/观察/反例/结论，保存不可变的 E1 快照，比较两次实验并使用相同数学引擎离线复算。支持 Notebook JSON/CSV 导出及安全导入、旧 G0 实验迁移。完整说明见 [G2 Notebook & Replay](docs/G2_NOTEBOOK_REPLAY.md)，[G2 跨运行环境验收](docs/G2_CROSS_RUNTIME_QUALIFICATION.md)列出固定实验包、Mac/Windows/Linux 使用方法和已通过的 Mac↔Vercel Linux 跨环境测试（3 个固定案例），以及通过 Computer MCP 完成的 Windows 真实设备验收。最新工作台采用单主画布和上下文观察/学习/研究面板，见 [工作台信息架构](docs/STUDIO_FOCUS_INFORMATION_ARCHITECTURE.md)。
 
