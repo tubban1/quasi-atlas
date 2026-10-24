@@ -12,7 +12,7 @@ test('research release gate reports blockers without breaking engineering beta d
  assert.equal(p.status,0,p.stderr);assert.equal(JSON.parse(p.stdout).status,'BLOCKED');
 });
 test('research gate does not treat empty approval or unverified links as evidence',()=>{
- const status=JSON.parse(readFileSync('docs/research-release-status.json','utf8'));
+ const status=JSON.parse(readFileSync('fixtures/g6/research-release-status.json','utf8'));
  for(const x of Object.values(status.externalApprovals))assert.equal(x,null);
  assert.equal(status.releaseTier,'engineering-beta');
  assert.equal(status.publicLaunchApproved,false);

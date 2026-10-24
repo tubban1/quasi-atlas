@@ -27,7 +27,7 @@ The pinned immutable golden fixture is `fixtures/g3/h1-gudhi-thresholds.json`. C
 
 ### G6 — Education & independent review
 - Six locally graded, original transfer questions in Research -> "学过的数学，能用在别处吗？"; understanding of contour values, clipped-window limits, reproducibility vs proof, synthetic data, H0/H1 intuition, and published theorem hypotheses. Answers are not transmitted nor persisted, no account required. These are **practice questions**, not evidence from a human study.
-- Machine-readable release record `docs/research-release-status.json`; `node scripts/research-release-gate.mjs --enforce-research-ready` must **exit 3 BLOCKED** until substantive scientific and external review gates clear. Do NOT attach this high-stakes gate to normal beta Vercel deployments.
+- Machine-readable release record `fixtures/g6/research-release-status.json`; `node scripts/research-release-gate.mjs --enforce-research-ready` must **exit 3 BLOCKED** until substantive scientific and external review gates clear. Do NOT attach this high-stakes gate to normal beta Vercel deployments.
 - **Not complete:** accessibility audit with keyboard + screen reader actual test devices, independent two educator reviews, independent mathematical reviewer, consented user study, open-source license permission and explicit release owner approval.
 
 ## Independent external review template
@@ -36,6 +36,6 @@ Reviewers must be humans independent of the implementing Agent. Record in the tr
 Educational pilot protocol: adults or appropriately consented participants, separate pre/post tasks, six unseen transfer questions, correct explanation of E1 vs proof, scope, time to first meaningful action, confounding/selection bias notes and voluntary consent. Report denominator, missing responses and all failures, never just a percentage. Small pilot results do not establish educational efficacy. Independent educator review is required even if metrics are favorable.
 
 ## Release decision
-Beta deployment only if `npm run gate` and all existing G0–G3 browser checks and Vercel build pass. Never claim **G3 complete**, **E3 certification**, **paper reproduced**, **external peer-reviewed**, **research-ready** or **G6 completed** without evidence and signatures. No mass distribution/licensing promises until open-source license and third-party dependencies are audited. See `docs/research-release-status.json`.
+Beta deployment only if `npm run gate` and all existing G0–G3 browser checks and Vercel build pass. Never claim **G3 complete**, **E3 certification**, **paper reproduced**, **external peer-reviewed**, **research-ready** or **G6 completed** without evidence and signatures. No mass distribution/licensing promises until open-source license and third-party dependencies are audited. See `fixtures/g6/research-release-status.json`.
 
 Next high-priority implementation sequence: (1) G3 H1 persistence interval pairing and TTK cross-baseline (2) G4 reviewed interval arithmetic with outward rounding and independent verifier (3) G5 target-paper hypothesis/scoped experimental reproduction with negative cases (4) G6 field study and external signoff.

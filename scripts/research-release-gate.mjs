@@ -2,7 +2,7 @@
 // Separate beta shipping from high-stakes "research-ready" certification.
 // This is intentionally a hard fail until external approvals are recorded AND reviewed.
 import{readFileSync}from'node:fs';
-const s=JSON.parse(readFileSync(new URL('../docs/research-release-status.json',import.meta.url),'utf8'));
+const s=JSON.parse(readFileSync(new URL('../fixtures/g6/research-release-status.json',import.meta.url),'utf8'));
 export function evaluateReadiness(s){
  const blockers=[];
  if(s.schema!=='quasi-atlas.research-release-gates/1.0')blockers.push('INVALID_GATE_SCHEMA');
