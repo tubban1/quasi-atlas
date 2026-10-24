@@ -1,0 +1,71 @@
+/* Navigable feature map: functional categories, not development milestones. */
+.catalog-page{background:#f5f7f1;min-height:calc(100vh - 82px)}
+.catalog-container{max-width:1320px;margin:0 auto;padding:33px 38px 65px}
+.catalog-hero{background:linear-gradient(112deg,#e6eee2 0%,#eff2e6 55%,#f7f4e8 100%);border:1px solid #e0e9dc;border-radius:26px;padding:48px clamp(25px,5vw,75px) 34px}
+.catalog-hero h1{font-size:clamp(31px,4vw,54px);line-height:1.3;letter-spacing:-2px;margin:14px 0 12px;color:#274e40}
+.catalog-hero h1 em{color:#689884;font-style:normal}
+.catalog-hero p{max-width:760px;font-size:13px;color:#657e6e;line-height:2;margin-bottom:28px}
+.catalog-search-label{font-size:11px;font-weight:800;color:#436b58;display:block;margin-bottom:9px}
+.catalog-search{background:#fffefb;border:1px solid #c8d9ca;border-radius:14px;display:flex;align-items:center;gap:12px;max-width:710px;padding:0 15px;box-shadow:0 9px 23px rgba(48,76,55,.05)}
+.catalog-search>span{font-size:26px;color:#5f9180}
+.catalog-search input{background:transparent;border:0;outline:0;min-width:0;width:100%;height:54px;color:#234b3d;font-size:13px}
+.catalog-search:focus-within{outline:3px solid #e2a461;outline-offset:3px}
+.catalog-search kbd{font-size:11px;border:1px solid #d7e2d7;border-radius:5px;color:#809183;padding:2px 7px}
+.catalog-hero-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 14px;max-width:710px;padding-top:16px;color:#7b9384;font-size:10px}
+.catalog-hero-foot #catalogCount{font-weight:800;color:#315d4c}
+.catalog-filters{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:26px 0 30px}
+.catalog-filters button{border:1px solid #d8e3d5;background:#fffef9;color:#567463;font-size:11px;font-weight:700;padding:11px 15px;border-radius:30px}
+.catalog-filters button[aria-pressed=true]{background:#2d6050;color:white;border-color:#2d6050}
+.catalog-sections{display:flex;flex-direction:column;gap:42px}
+.catalog-group{scroll-margin-top:105px}
+.catalog-group-heading{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.catalog-group-heading h2{font-size:24px;letter-spacing:-.7px;color:#264a3c;margin:0}
+.catalog-group-heading p{color:#829284;font-size:11px;flex:1;min-width:220px;margin:0}
+.catalog-group-heading>span{font-size:11px;color:#8ca08f}
+.catalog-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.catalog-card{min-width:0;border:1px solid #dce8db;background:#fffefa;border-radius:17px;text-align:left;padding:20px;min-height:188px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;color:#325747;box-shadow:0 6px 24px rgba(23,52,31,.025);transition:transform .15s,border-color .15s,box-shadow .15s}
+.catalog-card:hover{transform:translateY(-2px);border-color:#95baa4;box-shadow:0 12px 26px rgba(30,61,42,.08)}
+.catalog-card:focus-visible{outline:3px solid #e2a461;outline-offset:2px}
+.catalog-card-meta{font-size:10px;color:#72947d;font-weight:750;background:#edf5e9;border-radius:7px;padding:5px 9px}
+.catalog-card strong{font-size:17px;line-height:1.4;color:#275341}
+.catalog-card small{font-size:11px;line-height:1.7;color:#768b7c;flex:1}
+.catalog-card-action{font-size:11px;font-weight:800;color:#327666;margin-top:2px}
+.catalog-empty{font-size:14px;border:1px dashed #afc7ae;border-radius:15px;padding:35px;color:#547e68;text-align:center}
+.catalog-footer{border-top:1px solid #dce5d8;margin-top:48px;padding-top:22px;color:#799184;font-size:11px;line-height:1.8}
+.catalog-footer code{color:#426e58;background:#eaf0e6;border-radius:4px;padding:2px 5px}
+.catalog-target{outline:3px solid #e1a96e;outline-offset:4px;scroll-margin-top:100px;transition:outline .3s}
+@media(max-width:1020px){
+ .catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .catalog-container{padding:24px}
+ .app-header .global-actions{display:none}
+}
+@media(max-width:700px){
+ .app-header{gap:3px!important;padding:0 9px!important}
+ .app-header .brand-home{gap:5px;min-width:0}
+ .app-header .brand-symbol{width:27px;height:27px;border-radius:8px}
+ .app-header .brand-symbol .orbit{left:3px;top:8px;width:21px;height:12px}
+ .app-header .brand-symbol .orbit-core{left:12px;top:12px}
+ .app-header .brand-words strong{font-size:14px;letter-spacing:-1.1px;line-height:17px}
+ .app-header .global-nav{flex:0 1 auto;min-width:0;justify-content:flex-end}
+ .app-header .nav-link{font-size:9px;padding:8px 6px;border-radius:10px}
+ .catalog-page{min-height:calc(100vh - 69px)}
+ .catalog-container{padding:12px 12px 35px}
+ .catalog-hero{padding:27px 20px 22px;border-radius:18px}
+ .catalog-hero h1{font-size:32px;letter-spacing:-1.5px}
+ .catalog-hero p{font-size:11px;line-height:1.8}
+ .catalog-search input{font-size:12px;height:50px}
+ .catalog-search kbd{display:none}
+ .catalog-hero-foot{font-size:9px}
+ .catalog-filters{gap:7px;margin:18px 0 25px}
+ .catalog-filters button{font-size:10px;padding:9px 10px}
+ .catalog-sections{gap:31px}
+ .catalog-group-heading{gap:6px}
+ .catalog-group-heading h2{font-size:20px}
+ .catalog-group-heading p{flex-basis:100%;font-size:10px}
+ .catalog-group-heading>span{display:none}
+ .catalog-grid{grid-template-columns:1fr;gap:10px}
+ .catalog-card{min-height:0;padding:16px;gap:8px}
+ .catalog-card strong{font-size:15px}
+ .catalog-card small{font-size:11px}
+ .catalog-footer{font-size:10px}
+}

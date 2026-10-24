@@ -1,0 +1,51 @@
+import assert from 'node:assert/strict';
+import {chromium} from 'playwright';
+const base=process.env.QUASI_URL||'http://127.0.0.1:5188/';
+let browser;
+try{browser=await chromium.launch({channel:'chrome',headless:true});}
+catch{browser=await chromium.launch({headless:true});}
+const errors=[],checks=[];
+try{
+ const p=await browser.newPage({viewport:{width:1440,height:900}});
+ p.on('pageerror',e=>errors.push(String(e)));
+ await p.goto(base,{waitUntil:'domcontentloaded'});
+ await p.locator('#firstPlayIslands').evaluate(el=>new Promise((resolve,reject)=>{let count=0;const t=setInterval(()=>{if(el.textContent!=='—'){clearInterval(t);resolve();}else if(++count>100){clearInterval(t);reject(new Error('NO_RENDER'));}},100);}));
+ assert.equal(await p.locator('#homeScreen').isVisible(),true);
+ assert.equal(await p.locator('#firstPlayNext').isVisible(),false);
+ const before=await p.locator('#firstPlayCanvas').evaluate(el=>Array.from(el.getContext('2d').getImageData(0,0,el.width,el.height).data).filter((_,i)=>i%5000===0).slice(0,60).join(','));
+ checks.push('first canvas renders without action, progressive CTA initially hidden');
+ await p.locator('#firstPlayLevel').fill('1.65');
+ await p.locator('#firstPlayNext').waitFor({state:'visible'});
+ const after=await p.locator('#firstPlayCanvas').evaluate(el=>Array.from(el.getContext('2d').getImageData(0,0,el.width,el.height).data).filter((_,i)=>i%5000===0).slice(0,60).join(','));
+ assert.notEqual(before,after,'numerically rendered canvas changes');
+ assert.equal(await p.locator('#firstPlayLevelValue').textContent(),'1.65');
+ checks.push('slider updates actual numerical visualization and unlocks next CTA');
+ await p.screenshot({path:'docs/ui-first-play-desktop.png',fullPage:false,animations:'disabled'});
+ await p.locator('#firstPlayEnter').click();
+ assert.equal(await p.locator('#studioScreen').isVisible(),true);
+ assert.equal(await p.locator('#worldTitle').textContent(),'高斯群岛');
+ assert.equal(await p.locator('#firstPlayGuide').isVisible(),true);
+ checks.push('next CTA opens real archipelago and contextual task');
+ await p.waitForFunction(()=>document.querySelector('#numericStatus')?.textContent==='计算完成');
+ await p.locator('#worldCanvas').click({position:{x:200,y:175}});
+ assert.equal(await p.locator('#firstPlayGuide [data-guide-next]').isVisible(),true);
+ await p.locator('#firstPlayGuide [data-guide-next]').click();
+ assert.equal(await p.locator('#focusLearn').isVisible(),true);
+ assert.equal(await p.locator('#lifeTitle').textContent(),'雨后水坑为什么连在一起？');
+ checks.push('tap map -> reveal guided next lesson');
+ const m=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1});
+ m.on('pageerror',e=>errors.push('mobile '+String(e)));
+ await m.goto(base,{waitUntil:'domcontentloaded'});
+ await m.waitForFunction(()=>document.querySelector('#firstPlayIslands')?.textContent!=='—');
+ let metrics=await m.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth,canvas:document.querySelector('#firstPlayCanvas').getBoundingClientRect().width,sliderVisible:document.querySelector('#firstPlayLevel').getBoundingClientRect().width>220}));
+ assert.ok(metrics.scroll<=metrics.client+2,JSON.stringify(metrics));
+ assert.equal(metrics.sliderVisible,true);
+ await m.locator('#firstPlayLevel').fill('1.75');
+ await m.locator('#firstPlayNext').waitFor({state:'visible'});
+ await m.screenshot({path:'docs/ui-first-play-mobile.png',fullPage:false,animations:'disabled'});
+ metrics=await m.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth}));
+ assert.ok(metrics.scroll<=metrics.client+2,JSON.stringify(metrics));
+ checks.push('mobile immediate control, reveal, no horizontal overflow');
+ assert.deepEqual(errors,[]);
+ console.log(JSON.stringify({checks,pageErrors:errors},null,2));
+} finally {await browser.close();}

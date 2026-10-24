@@ -15,6 +15,7 @@ try{
  assert.equal(await desktop.locator('#studioScreen').isVisible(),false,'studio closed');
  await desktop.screenshot({path:'docs/ui-home-desktop.png',fullPage:true,animations:'disabled'});
  report.screens.push('home');
+ await desktop.locator('.more-nav summary').click();
  await desktop.locator('.nav-link[data-screen="roadmap"]').click();
  assert.equal(await desktop.locator('#roadmapScreen').isVisible(),true);
  assert.equal(await desktop.locator('#roadmapTimeline .milestone').count(),7,'G0–G6 timeline');
@@ -53,6 +54,7 @@ try{
  await mobile.screenshot({path:'docs/ui-studio-mobile.png',fullPage:true,animations:'disabled'});
  report.mobile.studioWidth=await mobile.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth}));
  assert.ok(report.mobile.studioWidth.scroll<=report.mobile.studioWidth.client+2,'mobile studio has no horizontal scroll');
+ await mobile.locator('.more-nav summary').click();
  await mobile.locator('.nav-link[data-screen="roadmap"]').click();
  await mobile.screenshot({path:'docs/ui-roadmap-mobile.png',fullPage:true,animations:'disabled'});
  report.mobile.roadmapWidth=await mobile.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth}));

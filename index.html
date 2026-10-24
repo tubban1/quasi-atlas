@@ -9,9 +9,15 @@
    <span class="brand-words"><strong>quasi<span>atlas</span></strong><small>让好奇，成为一种发现</small></span>
   </button>
   <nav class="global-nav" aria-label="主要导航">
-   <button type="button" class="nav-link active" data-screen="home" aria-current="page">发现</button>
-   <button type="button" class="nav-link" data-screen="studio">探索工作台</button>
-   <button type="button" class="nav-link" data-screen="roadmap">研究路线</button>
+   <button type="button" class="nav-link active" data-screen="home" aria-current="page">开始玩</button>
+   <button type="button" class="nav-link" data-screen="studio">自由探索</button>
+   <details class="more-nav">
+    <summary>更多 <span aria-hidden="true">⌄</span></summary>
+    <div class="more-nav-menu">
+     <button type="button" class="nav-link" data-screen="catalog">全部功能</button>
+     <button type="button" class="nav-link" data-screen="roadmap">研究路线</button>
+    </div>
+   </details>
   </nav>
   <div class="global-actions">
    <span class="local-pill"><span class="status-orb"></span>本地计算 · 无需登录</span>
@@ -22,38 +28,33 @@
  <div class="home-container">
   <section class="hero-panel">
    <div class="hero-copy">
-    <span class="hero-kicker"><span class="kicker-line"></span> A NEW WAY TO SEE MATHEMATICS</span>
-    <h1>原来数学，<br>藏在<em>每一天</em>里。</h1>
-    <p>从一张天气图、一条山路、两段声音开始。<br>像探索一座新世界一样，发现数学真正有趣的部分。</p>
-    <div class="hero-actions"><button type="button" class="hero-primary" data-launch="mountain">开始第一段探索 <span>↗</span></button><button type="button" class="hero-secondary" data-screen="roadmap">了解我们的研究计划 <span>→</span></button></div>
-    <div class="hero-foot"><span><b>06</b> 个可互动主题</span><i></i><span><b>0</b> 门槛开始</span><i></i><span><b>E0 / E1</b> 明确证据</span></div>
+    <span class="hero-kicker"><span class="kicker-line"></span> 10 秒试试看 · 不需要数学基础</span>
+    <h1>小岛会怎样<br><em>分开、相遇？</em></h1>
+    <p>不需要先学公式，也不用选功能。<strong>现在就拖动右边的水位，</strong>看看这个世界会发生什么。</p>
+    <div class="hero-foot first-play-promise"><span>✓ 无需注册</span><i></i><span>✓ 立即看到变化</span><i></i><span>✓ 随时自由探索</span></div>
+    <div class="first-play-next" id="firstPlayNext" hidden aria-live="polite">
+     <span class="next-kicker">✦ 你完成了第一次发现</span>
+     <strong>只改一个数字，地图就变了。</strong>
+     <p>下一步，去一张可以拖动、缩放、点击的真正数学地图上试试看。</p>
+     <div class="first-play-next-actions">
+      <button type="button" id="firstPlayEnter" class="hero-primary">继续玩下一关 ↗</button>
+      <button type="button" id="firstPlayLesson" class="hero-secondary">用生活问题理解 →</button>
+     </div>
+    </div>
+    <button id="firstPlaySkip" type="button" class="first-play-skip">我想直接进入完整地图 →</button>
    </div>
-   <div class="hero-art" aria-hidden="true">
-    <div class="hero-art-top"><span>FIG 01 — CONTOUR &amp; CHANGE</span><span>QUASI / ATLAS</span></div>
-    <svg viewBox="0 0 640 520" preserveAspectRatio="xMidYMid meet" class="hero-contour" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-       <linearGradient id="islandGrad" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e2ee8c"/><stop offset=".5" stop-color="#7dcdb1"/><stop offset="1" stop-color="#3a8b94"/></linearGradient>
-       <radialGradient id="artGlow"><stop stop-color="#efffda" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-       <filter id="softGlow"><feGaussianBlur stdDeviation="12"/></filter>
-      </defs>
-      <ellipse cx="310" cy="258" rx="255" ry="218" fill="url(#artGlow)"/>
-      <g transform="translate(22 0) rotate(-15 305 265)" fill="none" stroke-linecap="round">
-       <path d="M80 262C60 165 131 93 243 81C333 71 365 126 439 144C518 165 562 226 540 299C511 389 404 449 300 431C196 418 90 368 80 262Z" stroke="#86bda7" stroke-opacity=".4" stroke-width="1.4"/>
-       <path d="M99 259C88 181 151 119 243 108C329 95 363 154 430 170C490 185 521 231 514 297C495 370 405 417 300 407C213 400 108 349 99 259Z" stroke="#91c8a7" stroke-width="1.6"/>
-       <path d="M126 260C121 198 169 149 246 139C317 128 358 171 421 196C465 213 494 239 486 289C471 346 391 386 309 380C219 376 131 337 126 260Z" stroke="#a7d3a1" stroke-width="1.8"/>
-       <path d="M154 258C161 206 187 178 254 169C315 161 351 203 406 219C452 231 458 266 449 296C431 339 380 360 311 354C238 347 148 326 154 258Z" stroke="#cce1a2" stroke-width="2.1"/>
-       <path d="M183 260C180 224 215 194 257 195C309 195 349 224 382 239C414 253 421 275 412 296C400 323 363 327 313 322C244 315 189 303 183 260Z" stroke="#f1e9b3" stroke-width="2.3"/>
-       <path d="M221 256C231 231 248 225 276 228C320 232 330 246 355 259C377 271 388 290 368 301C341 313 307 292 277 289C242 285 210 280 221 256Z" fill="url(#islandGrad)" fill-opacity=".78" stroke="#fef8cd" stroke-width="2.3"/>
-       <path d="M256 257C275 238 305 254 324 262C351 274 352 286 331 287C313 286 289 271 271 270C252 271 248 266 256 257Z" stroke="#fffce1" stroke-width="2.4"/>
-      </g>
-      <g fill="#efffea"><circle cx="104" cy="131" r="4"/><circle cx="539" cy="376" r="5"/><circle cx="480" cy="130" r="2.5"/></g>
-      <path d="M84 442H190" stroke="#dcf2bd" stroke-opacity=".65"/><text x="84" y="461" font-size="12" fill="#e6f4d7" letter-spacing="2">THE BEAUTY OF CHANGE</text>
-    </svg>
-    <div class="art-float art-float-a"><span class="small-dot"></span> LEVEL c = 0.82</div>
-    <div class="art-float art-float-b">不同高度，相同世界。<span>↗</span></div>
+   <div class="hero-art first-play-surface">
+    <div class="first-play-top"><span>一张正在变化的小岛地图</span><span>当前可见 <b id="firstPlayIslands">—</b> 条闭合边界</span></div>
+    <canvas id="firstPlayCanvas" aria-label="可随水位实时变化的数学群岛数值模型" width="720" height="470" role="img"></canvas>
+    <div class="first-play-controls">
+     <div class="first-play-control-label"><label for="firstPlayLevel">↔ 拖动水位，让小岛变化</label><output id="firstPlayLevelValue" for="firstPlayLevel">0.45</output></div>
+     <input type="range" id="firstPlayLevel" min="-0.15" max="1.95" step="0.05" value="0.45" aria-describedby="firstPlayFeedback"/>
+     <p id="firstPlayFeedback" role="status" aria-live="polite">绿色是高出水面的部分。试着拖一下，观察它的变化。</p>
+     <small>公式生成的有限区域实验，不是现实地形或数学证明。</small>
+    </div>
    </div>
   </section>
-  <section class="journey-strip" aria-label="使用方法">
+  <section class="journey-strip" id="journeyStrip" aria-label="使用方法" hidden>
    <div class="journey-intro"><span class="section-kicker">HOW IT WORKS</span><strong>不用懂公式，<br>也可以先开始。</strong></div>
    <div class="journey-step"><span>01</span><strong>选一个生活问题</strong><small>从你已经熟悉的事情开始</small></div>
    <div class="journey-arrow">→</div>
@@ -142,6 +143,22 @@
 </div></aside>
 </div>
  <div class="studio-footnote">E0 教学模拟 · E1 有限窗口的数值观察 &nbsp; / &nbsp; 研究不等于证明 <span>由公式计算，默认不上传数据</span></div>
+</section>
+<section class="page catalog-page" id="catalogScreen" aria-label="Quasi Atlas 全部功能目录" hidden>
+ <div class="catalog-container">
+  <header class="catalog-hero">
+   <span class="section-kicker">YOUR GUIDE / EXPLORE EVERYTHING</span>
+   <h1>每一次好奇，<em>都有入口。</em></h1>
+   <p>按用途查找课程、数学世界、实验工具与研究成果。可以直接使用的功能会带你进入工作台；尚未提供操作界面的研究原型会明确标出。</p>
+   <label for="catalogSearch" class="catalog-search-label">查找一个功能</label>
+   <div class="catalog-search"><span aria-hidden="true">⌕</span><input type="search" id="catalogSearch" autocomplete="off" placeholder="试试：H0、复算、等值线、G5、网格精度…" aria-describedby="catalogCount"/><kbd>/</kbd></div>
+   <div class="catalog-hero-foot"><span id="catalogCount" role="status" aria-live="polite"></span><span>教学 E0 · 有限网格计算 E1 · 研究进展单独标注</span></div>
+  </header>
+  <nav id="catalogFilters" class="catalog-filters" aria-label="按功能类别筛选"></nav>
+  <div id="catalogSections" class="catalog-sections"></div>
+  <p id="catalogEmpty" class="catalog-empty" hidden>没有找到匹配的功能。换个关键词，或选择“全部功能”。</p>
+  <footer class="catalog-footer">新增功能统一在 <code>src/feature-catalog.js</code> 注册入口，避免再次散落在各个研究阶段和隐藏面板中。</footer>
+ </div>
 </section>
 <section class="page roadmap-page" id="roadmapScreen" aria-label="Quasi Atlas 研究发展路线" hidden>
  <div class="roadmap-container">

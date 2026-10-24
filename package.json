@@ -12,6 +12,8 @@
     "test:browser": "node scripts/life-smoke.mjs",
     "gate": "node scripts/scientific-gate.mjs",
     "test:ui": "node scripts/ui-smoke.mjs",
+    "test:catalog": "node scripts/catalog-smoke.mjs",
+    "test:first-play": "node scripts/first-play-smoke.mjs",
     "test:g2": "node scripts/g2-smoke.mjs",
     "test:studio": "node scripts/studio-focus-smoke.mjs",
     "test:g3": "node scripts/g3-smoke.mjs",

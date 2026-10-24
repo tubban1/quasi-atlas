@@ -1,4 +1,5 @@
 import {LIFE_LESSONS} from './life-content.js';
+import {setupFeatureCatalog} from './feature-catalog.js';
 
 const MILESTONES=[
  {id:'G0',state:'done',badge:'基础已实现',title:'可信的数学地基',summary:'定义模型，保留数值边界，让每次计算有来源。',details:['12 组解析几何基准与数学测试','有限域模型、参数单位与 SHA-256 实验哈希','E0 教学 / E1 数值观察的明确区分'],foot:'完成的是工程基础，不代表数学证明。'},
@@ -44,26 +45,67 @@ export function setupAppShell({initialSearch,life,activateResearch,showExperimen
      '</button>';
   }).join('');
   $('#homeTopicGrid').innerHTML=lessonCards;
-  $('#roadmapTimeline').innerHTML=MILESTONES.map((g,i)=>'<details class="milestone milestone-'+g.state+'"'+(i===0?' open':'')+'>'+
+  $('#roadmapTimeline').innerHTML=MILESTONES.map((g,i)=>'<details class="milestone milestone-'+g.state+'" data-milestone="'+g.id+'"'+(i===0?' open':'')+'>'+
    '<summary><span class="milestone-number">'+g.id+'</span><span class="milestone-content"><span class="milestone-tag">'+g.badge+'</span><strong>'+g.title+'</strong><span class="milestone-summary">'+g.summary+'</span></span><span class="milestone-expand" aria-hidden="true">＋</span></summary>'+
    '<div class="milestone-extra"><ul>'+g.details.map(s=>'<li>'+s+'</li>').join('')+'</ul><p>'+g.foot+'</p></div></details>').join('');
   $('#evidenceGrid').innerHTML=EVIDENCE.map(x=>'<div class="evidence-cell '+x[3]+'"><span>'+x[0]+'</span><strong>'+x[1]+'</strong><small>'+x[2]+'</small></div>').join('');
-  const allowed=new Set(['home','studio','roadmap']);
+  const allowed=new Set(['home','studio','catalog','roadmap']);
   function navigate(screen,{scroll=true,historyMode='push'}={}){
     const next=allowed.has(screen)?screen:'home';
-    const screens={home:$('#homeScreen'),studio:$('#studioScreen'),roadmap:$('#roadmapScreen')};
+    const screens={home:$('#homeScreen'),studio:$('#studioScreen'),catalog:$('#catalogScreen'),roadmap:$('#roadmapScreen')};
     const previous=document.body.dataset.page;
     Object.entries(screens).forEach(([k,e])=>{e.hidden=k!==next;});
     $$('[data-screen]').forEach(b=>{const active=b.dataset.screen===next;b.classList.toggle('active',active);if(b.classList.contains('nav-link')){if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');}});
     document.body.dataset.page=next;
+    document.querySelector('.more-nav')?.removeAttribute('open');
     const params=new URLSearchParams(location.search);
-    if(next==='home'){params.delete('screen');params.delete('life');}
+    if(next==='home'){params.delete('screen');params.delete('life');params.delete('tool');params.delete('milestone');}
+    else if(next==='catalog'){params.set('screen',next);params.delete('tool');params.delete('milestone');}
     else params.set('screen',next);
     const url=location.pathname+(params.size?'?'+params.toString():'');
     if(historyMode!=='none')history[historyMode==='push'&&previous!==next?'pushState':'replaceState'](null,'',url);
     if(scroll)window.scrollTo({top:0,behavior:'instant'});
     if(next==='studio'){requestAnimationFrame(()=>{window.dispatchEvent(new Event('resize'));});}
   }
+  function openFeature(feature){
+    if(feature.kind==='milestone'){
+      navigate('roadmap');
+      const milestone=$('[data-milestone="'+feature.value+'"]');
+      if(milestone){milestone.open=true;milestone.scrollIntoView({block:'start'});}
+      const params=new URLSearchParams(location.search);params.set('milestone',feature.value);
+      history.replaceState(null,'',location.pathname+'?'+params.toString());return;
+    }
+    if(feature.kind==='screen'){navigate(feature.value);return;}
+    navigate('studio');
+    if(feature.kind==='lesson'){life.show(feature.value);activateResearch('learn');return;}
+    if(feature.kind==='world'){showExperiment(feature.value);activateResearch('wander');return;}
+    if(feature.kind==='mode'){activateResearch(feature.value);return;}
+    if(feature.kind==='notebook'){$('#openNotebook')?.click();return;}
+    if(feature.kind==='experiment'){
+      activateResearch('research');
+      const target=feature.value==='h0'?$('#h0Panel'):
+        feature.value==='transfer'?$('#transferCheck'):
+        feature.value==='export'?[...$('#focusResearch .focus-more')].find(d=>d.querySelector('#exportData')):
+        $('#discoveryCard');
+      if(target){
+        if(target.tagName==='DETAILS')target.open=true;
+        if(feature.value==='export'){
+          const details=[...$('#focusResearch .focus-more')].find(d=>d.querySelector('#exportData'));
+          if(details)details.open=true;
+        }
+        target.scrollIntoView({block:'nearest',behavior:'instant'});
+        target.classList.add('catalog-target');
+        setTimeout(()=>target.classList.remove('catalog-target'),1800);
+      }
+    }
+  }
+  const catalog=setupFeatureCatalog({openFeature});
+  document.addEventListener('keydown',event=>{
+    if(event.key!=='/'||event.altKey||event.ctrlKey||event.metaKey)return;
+    if(event.target.matches('input,textarea,select,[contenteditable]'))return;
+    if(document.querySelector('dialog[open]'))return;
+    event.preventDefault();navigate('catalog');catalog.focusSearch();
+  });
   $$('[data-screen]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.screen)));
   $$('[data-launch]').forEach(b=>b.addEventListener('click',()=>{navigate('studio');life.show(b.dataset.launch);document.querySelector('.mode[data-mode="learn"]')?.click();}));
   $$('[data-launch-mode]').forEach(b=>b.addEventListener('click',()=>{
@@ -75,8 +117,16 @@ export function setupAppShell({initialSearch,life,activateResearch,showExperimen
   }));
   const requested=initialSearch.get('screen');
   if(requested==='roadmap')navigate('roadmap',{scroll:false,historyMode:'none'});
+  else if(requested==='catalog')navigate('catalog',{scroll:false,historyMode:'none'});
   else if(requested==='studio'||initialSearch.has('life')||initialSearch.has('world'))navigate('studio',{scroll:false,historyMode:'none'});
   else navigate('home',{scroll:false,historyMode:'none'});
-  window.addEventListener('popstate',()=>{const target=new URLSearchParams(location.search).get('screen')||'home';navigate(target,{scroll:false,historyMode:'none'});});
+  function restoreMilestone(initial=false){
+    const id=(initial?initialSearch:new URLSearchParams(location.search)).get('milestone');
+    if(id&&document.body.dataset.page==='roadmap'){
+      const milestone=$('[data-milestone="'+id+'"]');if(milestone)milestone.open=true;
+    }
+  }
+  restoreMilestone(true);
+  window.addEventListener('popstate',()=>{const target=new URLSearchParams(location.search).get('screen')||'home';navigate(target,{scroll:false,historyMode:'none'});restoreMilestone();});
   return {navigate};
 }

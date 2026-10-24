@@ -1,7 +1,10 @@
 import './style.css';
 import './ui-v2.css';
+import './feature-catalog.css';
 import './notebook.css';
 import './studio-focus.css';
+import './first-play.css';
+import {setupFirstPlay} from './first-play.js';
 import './h0.css';
 import {setupH0UI} from './h0-ui.js';
 import {setupStudioFocus} from './studio-focus.js';
@@ -322,4 +325,20 @@ h0UI=setupH0UI({
   worker.postMessage({...researchPayload('topology-h0'),direction,signature});return true;
  },
  download:downloadBlob,notify:toast
+});
+
+
+// A tiny genuine first-touch experiment before the full studio.
+setupFirstPlay({
+  openStudio:()=>{
+    window.__appShell.navigate('studio');
+    window.__lifeLens.hide();
+    selectPreset('archipelago');
+    document.querySelector('.mode[data-mode="wander"]')?.click();
+  },
+  openLesson:id=>{
+    window.__appShell.navigate('studio');
+    window.__lifeLens.show(id);
+    document.querySelector('.mode[data-mode="learn"]')?.click();
+  }
 });
