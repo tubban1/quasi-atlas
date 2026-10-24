@@ -1,0 +1,26 @@
+/* G3.1 H0; collapsed by default to keep the Studio focused. */
+.h0-research{border:1px solid #d4e5da;border-radius:13px;background:#f3f8f0;overflow:hidden;margin:3px 0}
+.h0-research>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:15px 13px;color:#315d4c;font-size:12px;font-weight:750}
+.h0-research>summary::-webkit-details-marker{display:none}
+.h0-research>summary::after{content:'＋';font-size:17px;color:#669579}
+.h0-research[open]>summary::after{content:'−'}
+.h0-research[open]>summary{border-bottom:1px solid #d5e5d8}
+.h0-research-body{padding:15px 14px 17px;display:flex;flex-direction:column;gap:11px}
+.h0-research-body p{margin:0;color:#6c8677;font-size:10px;line-height:1.85}
+.h0-controls{display:flex;gap:7px}
+.h0-controls select{flex:1;min-width:0;background:#fff;border:1px solid #cfdfd2;border-radius:8px;padding:9px;color:#446b54;font-size:11px}
+.h0-controls button{border:0;background:#2d7254;color:white;padding:9px 13px;border-radius:8px;font-weight:750;font-size:10px}
+.h0-controls button:disabled{opacity:.5}
+.h0-overview{display:flex;align-items:baseline;gap:8px;color:#51765e;font-size:10px}
+.h0-overview strong{font-size:30px;color:#28664d}
+.h0-audit{padding:10px 11px;border-radius:8px;background:#e5f0e7;font-size:10px;color:#47765a;line-height:1.8}
+.h0-audit[data-status=DIFFERENT]{background:#fbe6d8;color:#96513e}
+.h0-bars{display:grid;gap:7px}
+.h0-bar-row{display:grid;grid-template-columns:minmax(0,1fr) 84px;align-items:center;gap:8px}
+.h0-bar-row span{font-size:10px;color:#6c8475;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.h0-bar-rail{height:8px;border-radius:6px;background:#d9e6dc;overflow:hidden}
+.h0-bar-fill{height:100%;border-radius:6px;background:#58a68a}
+.h0-bar-fill.essential{background:#a0b76a}
+.h0-freshness{font-size:10px;color:#648d70}.h0-freshness[data-stale=true]{color:#a36b47}
+#exportH0{padding:10px;border:1px solid #c3dbca;border-radius:8px;background:#eff7ee;color:#356a4e;font-weight:750;font-size:11px}
+#exportH0:disabled{opacity:.45}

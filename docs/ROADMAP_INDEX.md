@@ -1,8 +1,8 @@
 # Quasi Atlas · 研究级规划文档入口
 
-**制定日期：2026-10-23 | 原基线 0.2；截至 2026-10-24，G0/G1 工程已实施，G2 Notebook Beta 的 Mac↔Linux 同引擎固定样例复现已通过，Windows 真实设备也完成了同引擎固定样例验收；独立算法、教育实证及真实开放数据仍待验收。**
+**制定日期：2026-10-23 | 原基线 0.2；截至 2026-10-24，G0/G1 工程已实施，G2 Notebook Beta 的 Mac↔Linux 同引擎固定样例复现已通过，Windows 真实设备也完成了同引擎固定样例验收；G3.1 有限顶点网格 H0 与第三方 GUDHI 3.11.0 已完成 30 组/1,048 条区间对照；H1、TTK、科研级认证、教育实证及真实开放数据仍待验收。**
 
-G2 当前实施、复算协议与限制见 [G2_NOTEBOOK_REPLAY.md](G2_NOTEBOOK_REPLAY.md)，跨环境验证命令与证据要求见 [G2_CROSS_RUNTIME_QUALIFICATION.md](G2_CROSS_RUNTIME_QUALIFICATION.md)。工作台渐进式信息架构见 [STUDIO_FOCUS_INFORMATION_ARCHITECTURE.md](STUDIO_FOCUS_INFORMATION_ARCHITECTURE.md)，Windows 实机验收见 [G2_WINDOWS_ACCEPTANCE.md](G2_WINDOWS_ACCEPTANCE.md)。全新 UI 信息架构见 [UI_2_INFORMATION_ARCHITECTURE.md](UI_2_INFORMATION_ARCHITECTURE.md)，生产研发流程见 [G1_CICD_RUNBOOK.md](G1_CICD_RUNBOOK.md)，实际 G1 验收与 GitHub Actions 账单阻塞见 [G1_DELIVERY_REPORT.md](G1_DELIVERY_REPORT.md)。
+G3.1 已实施的 H0/GUDHI 独立对照、固定基准与限制见 [G3_H0_INDEPENDENT_REFERENCE.md](G3_H0_INDEPENDENT_REFERENCE.md)。G2 当前实施、复算协议与限制见 [G2_NOTEBOOK_REPLAY.md](G2_NOTEBOOK_REPLAY.md)，跨环境验证命令与证据要求见 [G2_CROSS_RUNTIME_QUALIFICATION.md](G2_CROSS_RUNTIME_QUALIFICATION.md)。工作台渐进式信息架构见 [STUDIO_FOCUS_INFORMATION_ARCHITECTURE.md](STUDIO_FOCUS_INFORMATION_ARCHITECTURE.md)，Windows 实机验收见 [G2_WINDOWS_ACCEPTANCE.md](G2_WINDOWS_ACCEPTANCE.md)。全新 UI 信息架构见 [UI_2_INFORMATION_ARCHITECTURE.md](UI_2_INFORMATION_ARCHITECTURE.md)，生产研发流程见 [G1_CICD_RUNBOOK.md](G1_CICD_RUNBOOK.md)，实际 G1 验收与 GitHub Actions 账单阻塞见 [G1_DELIVERY_REPORT.md](G1_DELIVERY_REPORT.md)。
 
 > 一句话：从看见生活中的数学，到亲自提出可证伪猜想，再到可信赖、可复现的科学实验。产品允许人人进入；研究级结论必须遵守严格限定。
 
@@ -52,8 +52,8 @@ Research Edition 1.0（目标：受限领域内可信、可重复）
 
 ## 下一次委派给 Agent 的明确任务
 
-“阅读 docs/ROADMAP_INDEX.md 和四份主规划，以 G0 为唯一目标。保留现有 0.2 的兼容性，先补 12 个数学解析 golden fixtures、实验模型/证据字段与失败状态，建立 CI 并验证，不做 G1–G6、不部署、不擅自升级科研宣传口径。所有 PR 提供测试、回归、解析反例和验收报告。”
+“基于已上线的 G3.1 H0 与经 GUDHI 3.11 验证的 30 组基准，推进 G3.2 H1（明确 2D cubical complex 和非周期边界约定），用独立 GUDHI H1 数据核对洞的出现/消失，并引入 TTK 参考案例和失败差异报告。不要破坏 G2 的 Notebook/1.1 来源指纹，不提升 E1 证据等级；所有 PR 提供退化反例、完整数值差异和 G0–G2 回归。”
 
 ## 文件状态
 
-本 Roadmap 为**计划及验收标准**；G0/G1 与 G2 Notebook Beta 已有代码，但 G2 跨物理设备验收及 G3–G6 研究能力尚未完成。文档需要在 G0 实际开始时转化为 issue 与 acceptance fixtures；涉及研究级数学判断的部分要外部专家审核。
+本 Roadmap 为**计划及验收标准**；G0/G1、G2 Notebook Beta、G2 Mac/Windows/Linux 跨平台实验复算已实施，G3.1 顶点网格 H0、30 组 Python BFS/GUDHI 固定基准已实施。G3.2 H1、TTK、连续域严格认证及 G4–G6 尚未完成。涉及研究级数学结论的部分仍须外部专家审核。

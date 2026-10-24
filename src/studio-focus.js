@@ -22,6 +22,9 @@ export function setupStudioFocus(){
   const item=right.querySelector(selector);if(item)observe.append(item);
  }
  const discovery=right.querySelector('.discovery-card');if(discovery)research.append(discovery);
+ const h0=document.createElement('details');h0.id='h0Panel';h0.className='h0-research';
+ h0.innerHTML='<summary>◉ 区域如何出现、合并？ · H0 实验</summary><div class="h0-research-body"><p>试着想象：水位升降时，岛屿怎样出现和合并？这里独立统计有限网格中的连通区域。</p><div class="h0-controls"><select id="h0Direction" aria-label="阈值集合方向"><option value="superlevel">高于水位的岛屿</option><option value="sublevel">低于水位的湖谷</option></select><button id="runH0" type="button">分析 H0 →</button></div><div id="h0Overview" class="h0-overview" aria-live="polite">点击分析，查看当前水位有多少个分离区域。</div><div id="h0Audit" class="h0-audit" aria-live="polite">两套算法将逐一核对 5 个阈值。</div><div id="h0Bars" class="h0-bars" role="list" aria-label="H0 持续区间"></div><p id="h0Limits">4 邻接顶点网格的有限区域 H0；H1、TTK/GUDHI 仍待验收。</p><span id="h0Freshness" class="h0-freshness" role="status"></span><button id="exportH0" type="button" disabled>↓ 导出 H0 研究记录 JSON</button></div>';
+ research.append(h0);
  const collapsible=(title,selectors,open=false)=>{
   const details=document.createElement('details');details.className='focus-more';details.open=open;
   const summary=document.createElement('summary');summary.textContent=title;details.append(summary);

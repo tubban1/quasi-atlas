@@ -2,6 +2,8 @@ import './style.css';
 import './ui-v2.css';
 import './notebook.css';
 import './studio-focus.css';
+import './h0.css';
+import {setupH0UI} from './h0-ui.js';
 import {setupStudioFocus} from './studio-focus.js';
 import {setupAppShell} from './shell.js';
 import {PRESETS,getPreset,evaluateField} from './math/fields.js';
@@ -28,7 +30,7 @@ const palettes=[
  [[13,22,26],[39,65,66],[65,93,79],[120,139,102],[182,174,128],[227,203,150],[250,228,193]]
 ];
 const bgForTheme=['#092e38','#0d1c32','#152521'];
-let baseline=null,latestVerification=null,criticalResult=null,criticalSignature='',researchRequest=0,focusPoint=null;
+let baseline=null,latestVerification=null,criticalResult=null,criticalSignature='',researchRequest=0,focusPoint=null,h0UI=null;
 let raster=document.createElement('canvas'),rctx=raster.getContext('2d'),refreshTimer=null,playTime=0,toastTimer=null;
 const fmt=n=>(n>=0?'+':'')+Number(n).toFixed(2);
 const finite=(n,fallback=0)=>Number.isFinite(n)?n:fallback;
@@ -73,7 +75,7 @@ function updateInsights(){
 function computeSize(){const box=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);if(box.width<1||box.height<1)return;
   state.resizeWidth=box.width;state.resizeHeight=box.height;canvas.width=Math.round(box.width*dpr);canvas.height=Math.round(box.height*dpr);schedule();
 }
-function schedule(){clearTimeout(refreshTimer);$('#numericStatus').textContent='参数待计算';window.__notebook?.markStale();refreshTimer=setTimeout(calculate,38);if(latestVerification){$('#verificationOutput').dataset.stale=String(experimentSignature()!==latestVerification.signature);if($('#verificationOutput').dataset.stale==='true')$('#verificationOutput').innerHTML='<span>参数已改变。上次报告仍可导出，但请重新运行三档精度验证。</span>';}}
+function schedule(){clearTimeout(refreshTimer);$('#numericStatus').textContent='参数待计算';window.__notebook?.markStale();h0UI?.markStale();refreshTimer=setTimeout(calculate,38);if(latestVerification){$('#verificationOutput').dataset.stale=String(experimentSignature()!==latestVerification.signature);if($('#verificationOutput').dataset.stale==='true')$('#verificationOutput').innerHTML='<span>参数已改变。上次报告仍可导出，但请重新运行三档精度验证。</span>';}}
 function calculate(){
  refreshTimer=null;if(!state.resizeWidth)return;state.seq++;
  $('#numericStatus').textContent='计算中…';
@@ -81,6 +83,7 @@ function calculate(){
 }
 worker.onmessage=ev=>{
  const m=ev.data;
+ if(m.action==='topology-h0'){h0UI?.receive(m);return;}
  if(m.action==='critical'||m.action==='verify'){handleResearchResponse(m);return;}
  if(m.error){$('#numericStatus').textContent='计算失败';console.error(m.error);toast('计算失败，请查看控制台');return;}
  // Always retain a grid received from worker; it may be reused for subsequent contour requests.
@@ -306,3 +309,14 @@ window.__notebook=setupNotebook({
 });
 
 window.__studioFocus=setupStudioFocus();
+// G3.1 is progressive disclosure inside Research, not another permanent panel.
+h0UI=setupH0UI({
+ signature:experimentSignature,
+ request:(direction,signature)=>{
+  if(window.__lifeLens?.current?.id==='beats'){
+   toast('拍频是一维信号，不属于二维 H0 网格实验。请先选二维世界。');return false;
+  }
+  worker.postMessage({...researchPayload('topology-h0'),direction,signature});return true;
+ },
+ download:downloadBlob,notify:toast
+});

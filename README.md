@@ -1,4 +1,6 @@
-# Quasi Atlas · 数学秘境 (G2 Discovery Notebook beta)
+# Quasi Atlas · 数学秘境 (G3.1 H0 Beta)
+
+**G3.1 已实施**：研究模式新增默认折叠的「区域如何出现、合并？ · H0 实验」，可分别观察高于/低于阈值的有限网格连通分量及主要持久区间，导出 E1 报告。30 组固定样例/480 阈值核对通过，并使用独立第三方 GUDHI 3.11.0 生成 **1,048 条 H0 区间**逐条验证。H1、TTK 和完整 G3 科研认证尚未完成，详见 [G3 H0 验证文档](docs/G3_H0_INDEPENDENT_REFERENCE.md)。
 
 **v0.5.0-beta.2 · G2 已实现的体验**：从探索工作台点击「▤ 发现日志」，记录问题/预测/观察/反例/结论，保存不可变的 E1 快照，比较两次实验并使用相同数学引擎离线复算。支持 Notebook JSON/CSV 导出及安全导入、旧 G0 实验迁移。完整说明见 [G2 Notebook & Replay](docs/G2_NOTEBOOK_REPLAY.md)，[G2 跨运行环境验收](docs/G2_CROSS_RUNTIME_QUALIFICATION.md)列出固定实验包、Mac/Windows/Linux 使用方法和已通过的 Mac↔Vercel Linux 跨环境测试（3 个固定案例），以及通过 Computer MCP 完成的 Windows 真实设备验收。最新工作台采用单主画布和上下文观察/学习/研究面板，见 [工作台信息架构](docs/STUDIO_FOCUS_INFORMATION_ARCHITECTURE.md)。
 
@@ -8,7 +10,7 @@
 
 **G1 六个可互动生活数学主题已加入：** 山路、积水、温度、拍频（1D）、摩尔纹、Wi‑Fi。学习流程为预测、动手、解释、反例、研究/JSON。所有现实类比均标记为合成模型；详见 [docs/G1_CICD_RUNBOOK.md](docs/G1_CICD_RUNBOOK.md)。
 
-**本地质量门禁：** npm run gate · npm run build · npm run test:g2 · npm run test:ui · npm run test:browser。Vercel Git 自动部署使用 vercel.json：测试通过后发布。GitHub Actions 已配置但账户付费/支出上限目前阻止 runner 执行，详情见运行手册。正式站：https://math.edunest.app/。
+**本地质量门禁：** npm run gate（含 G3.1 GUDHI 固定基准）· npm run build · npm run test:g3 · npm run test:g2 · npm run test:ui · npm run test:browser。Vercel Git 自动部署使用 vercel.json：测试通过后发布。GitHub Actions 已配置但账户付费/支出上限目前阻止 runner 执行，详情见运行手册。正式站：https://math.edunest.app/。
 
 **部署域名**：https://math.edunest.app/（独立 Vercel 项目 quasi-atlas-math）
 

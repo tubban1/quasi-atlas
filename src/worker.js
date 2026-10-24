@@ -1,6 +1,8 @@
 import {getPreset,evaluateField} from './math/fields.js';
 import {extractContours,buildSpectrum} from './math/contours.js';
 import {locateCriticalPoints,verifyLevel} from './math/verify.js';
+import {analyzeH0} from './math/topology-h0.js';
+import {auditH0AgainstFlood} from './math/h0-flood-reference.js';
 let gridKey='',cache=null;
 self.onmessage=(ev)=>{
  const d=ev.data,{seq,id,level,phase,scale,panX,panY,resolution,width,height,wantsSpectrum}=d;
@@ -8,6 +10,21 @@ self.onmessage=(ev)=>{
   const preset=getPreset(id);
   const aspect=width/Math.max(1,height);
   const bounds={x0:panX-scale,x1:panX+scale,y0:panY-scale/aspect,y1:panY+scale/aspect};
+  if(d.action==='topology-h0'){
+   // Separate finite vertex-grid graph from the rendered contour traces.
+   // Cap the sampling so the analysis remains responsive on mobiles.
+   const gx=96,gy=Math.max(32,Math.min(96,Math.round(96/Math.max(0.5,aspect))));
+   const values=new Float32Array((gx+1)*(gy+1));
+   for(let j=0;j<=gy;j++)for(let i=0;i<=gx;i++)values[j*(gx+1)+i]=evaluateField(bounds.x0+(bounds.x1-bounds.x0)*i/gx,bounds.y0+(bounds.y1-bounds.y0)*j/gy,preset,phase);
+   const direction=d.direction==='sublevel'?'sublevel':'superlevel';
+   const range=preset.max-preset.min;
+   const thresholds=[preset.min,level-range*.02,level,level+range*.02,preset.max].filter(Number.isFinite);
+   const result=analyzeH0(values,gx,gy,{direction,thresholds,maxBars:22});
+   const crossCheck=auditH0AgainstFlood(values,gx,gy,result);
+   self.postMessage({action:'topology-h0',requestId:d.requestId,signature:d.signature,result,crossCheck,
+    source:{id,phase,level,worldDomain:{xmin:bounds.x0,xmax:bounds.x1,ymin:bounds.y0,ymax:bounds.y1},nx:gx,ny:gy,floatFormat:'float32'}});
+   return;
+  }
   if(d.action==='critical'){
    const result=locateCriticalPoints({preset,phase,bounds,steps:44});
    self.postMessage({action:'critical',requestId:d.requestId,signature:d.signature,result});
